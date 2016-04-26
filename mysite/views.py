@@ -12,3 +12,12 @@ sys.setdefaultencoding("utf-8")
 
 def welcome(req):
     return render_to_response('welcome.html')
+
+def login(req):
+    return render_to_response('login.html')
+
+def register(req):
+    return render_to_response('register.html')
+
+def show(req):
+    return render_to_response('show.html')
