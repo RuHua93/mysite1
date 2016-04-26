@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     url(r'^register$', views.register, name = 'register'),
     url(r'^login$', views.login, name = 'login'),
     url(r'^show$', views.show, name = 'show'),
+    url(r'^doreg$', views.doreg, name = 'doreg'),
     url(r'^admin/', include(admin.site.urls)),
 )

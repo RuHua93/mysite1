@@ -111,68 +111,19 @@
         </style>
 
         <script type="text/javascript">
-            function loadXMLDoc(str)
-            {
-                document.getElementById("myDiv").innerHTML = "<div class=\"alert alert-error alert-dismissable\">" +
-                "   <button type=\"button\" class=\"close\" data-dismiss=\"alert\" onclick=\"cancel()\">&times;</button>" +
-                "<strong>嘿嘿嘿!</strong>"+str+"</div>"
-            }
-            function sleep(numberMillis) {
-               var now = new Date();
-               var exitTime = now.getTime() + numberMillis;
-               while (true) {
-                   now = new Date();
-                   if (now.getTime() > exitTime)    return;
-                }
-            }
             function cancel()
             {
                 document.getElementById("myDiv").innerHTML = ""
             }
-            function  tolog()
+            function  toreg()
             {
-                window.location.href='login';
+                window.location.href='register';
                 return false
             }
-            function reg()
+            function log()
             {
                 var str;
-                var Regex = /^(?:\w+\.?)*\w+@(?:\w+\.)*\w+$/;
-                if (document.getElementById("uname").value == "")
-                {
-                    str = '用户名为空';
-                }
-                else if (document.getElementById("email").value == "")
-                {
-                    str = '电子邮件为空'
-                }
-                else if (Regex.test(document.getElementById("email").value) == false)
-                {
-                    str = '电子邮件格式不合法'
-                }
-                else if (document.getElementById("password").value == "")
-                {
-                    str = '密码为空'
-                }
-                else if (document.getElementById("password").value.length < 6 || document.getElementById("password").value.length > 20)
-                {
-                    str = '密码长度不合法'
-                }
-                else if (document.getElementById("repeat").value != document.getElementById("password").value)
-                {
-                    str = '两次输入不一致'
-                }
-                else
-                {
-                    window.location.href = 'doreg';
-                    return false
-                }
-
-                document.getElementById("myDiv").innerHTML = "<div class=\"alert alert-error alert-dismissable\">" +
-                "   <button type=\"button\" class=\"close\" data-dismiss=\"alert\" onclick=\"cancel()\">&times;</button>" +
-                "<strong>注册失败&nbsp;</strong>"+str+"</div>";
-
-                return false
+                document.getElementById("")
             }
         </script>
     </head>
@@ -196,16 +147,21 @@
 {#                        <li>#}
 {#                            <img src="http://ceysv.img47.wal8.com/img47/543993_20160424102125/146150513412.png" alt="追韩剧网"/>#}
 {#                        </li>#}
-                        <li class="itemli">
-                            <a href="login">登录</a>
-                        </li>
                         <li class="itemli active">
-                            <a href="#">注册</a>
+                            <a href="#">登录</a>
+                        </li>
+                        <li class="itemli">
+                            <a href="register">注册</a>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div id="myDiv"></div>
+            <div id="myDiv">
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
+                    <strong>注册成功&nbsp;</strong>
+                </div>
+            </div>
             <div id='content' class='row-fluid'>
 
                 <div class="span4 sidebar"></div>
@@ -216,20 +172,18 @@
                         <div class="span1 siderbar">
                         <form action="reg">
                             <fieldset>
-                                <legend>注册</legend>
+                                <legend>登录</legend>
 {#                                <label>用户名</label>#}
-                                <input id="uname" type="text" placeholder="用户名">
-                                <input id="email" type="text" placeholder="电子邮箱">
-                                <input id="password" type="password" placeholder="密码">
-                                <input id="repeat" type="password" placeholder="确认密码">
+                                <input type="text" placeholder="用户名">
+                                <input type="text" placeholder="密码">
 {#                                <span class="help-block">Example block-level help text here.</span>#}
 {#                                <label class="checkbox">#}
 {#                                    <input type="checkbox"> Check me out#}
 {#                                </label>#}
                                 <br/>
-                                <button type="submit" class="btn btn-info" onclick="return reg()">注&nbsp;册</button>
+                                <button type="submit" class="btn btn-info">登&nbsp;录</button>
                                 &nbsp;
-                                <button type="submit" class="btn btn-success" onclick="return tolog()">返&nbsp;回</button>
+                                <button type="submit" class="btn btn-success" onclick="return toreg()">注&nbsp;册</button>
                             </fieldset>
                         </form></div>
                     </div>
