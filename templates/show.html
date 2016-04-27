@@ -69,7 +69,14 @@
                     </ul>
                 </div>
             </div>
-
+            <div id="myDiv">
+                {% if logstat == "ok" %}
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
+                        <strong>登录成功&nbsp;</strong>
+                    </div>
+                {% endif %}
+            </div>
             <div id='content' class='row-fluid'>
 
                 <div class='span8 main listc'>

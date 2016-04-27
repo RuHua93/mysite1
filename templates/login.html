@@ -111,12 +111,6 @@
         </style>
 
         <script type="text/javascript">
-            function loadXMLDoc(str)
-            {
-                document.getElementById("myDiv").innerHTML = "<div class=\"alert alert-error alert-dismissable\">" +
-                "   <button type=\"button\" class=\"close\" data-dismiss=\"alert\" onclick=\"cancel()\">&times;</button>" +
-                "<strong>注册失败!</strong>"+str+"</div>"
-            }
             function cancel()
             {
                 document.getElementById("myDiv").innerHTML = ""
@@ -126,10 +120,25 @@
                 window.location.href='register';
                 return false
             }
-            function log()
+            function dolog()
             {
-                var str;
-                document.getElementById("")
+                if (document.getElementById("username").value == "")
+                {
+                    str = '请输入用户名';
+                }
+                else if (document.getElementById("password").value == "")
+                {
+                    str = '请输入密码';
+                }
+                else
+                {
+                    document.getElementById("frmlog").submit();
+                    return false
+                }
+                document.getElementById("myDiv").innerHTML = "<div class=\"alert alert-error alert-dismissable\">" +
+                "   <button type=\"button\" class=\"close\" data-dismiss=\"alert\" onclick=\"cancel()\">&times;</button>" +
+                "<strong>登录失败&nbsp;</strong>"+str+"</div>";
+                return false
             }
         </script>
     </head>
@@ -141,7 +150,7 @@
                     <img src="http://ceysv.img47.wal8.com/img47/543993_20160424102125/146154346933.png" />
                 </div>
                 <div id="subtit" class="span7 sidebar">
-                    <span >|<br/>|<br/>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提供韩剧信息整合,搜索及订阅</span>
+                    <span >|<br/>|<br/>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提供韩剧信息整合,搜索及订阅{{ request.session.regstat }}</span>
                 </div>
                 <div class="span2 sidebar">
                 </div>
@@ -163,7 +172,12 @@
                 </div>
             </div>
             <div id="myDiv">
-
+                {% if regstat == "ok" %}
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
+                        <strong>注册成功&nbsp;</strong>
+                    </div>
+                {% endif %}
             </div>
             <div id='content' class='row-fluid'>
 
@@ -173,18 +187,19 @@
                     <div class="row-fluid" id="innerblk">
                         <div class="span1 sidebar"></div>
                         <div class="span1 siderbar">
-                        <form action="reg">
+                        <form id="frmlog" action="dolog" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
                             <fieldset>
                                 <legend>登录</legend>
 {#                                <label>用户名</label>#}
-                                <input type="text" placeholder="用户名">
-                                <input type="text" placeholder="密码">
+                                <input name="username" id="username" type="text" placeholder="用户名" >
+                                <input name="password" id="password" type="password" placeholder="密码" >
 {#                                <span class="help-block">Example block-level help text here.</span>#}
 {#                                <label class="checkbox">#}
 {#                                    <input type="checkbox"> Check me out#}
 {#                                </label>#}
                                 <br/>
-                                <button type="submit" class="btn btn-info">登&nbsp;录</button>
+                                <button type="submit" class="btn btn-info" onclick="return dolog()">登&nbsp;录</button>
                                 &nbsp;
                                 <button type="submit" class="btn btn-success" onclick="return toreg()">注&nbsp;册</button>
                             </fieldset>

@@ -11,5 +11,7 @@ urlpatterns = patterns('',
     url(r'^login$', views.login, name = 'login'),
     url(r'^show$', views.show, name = 'show'),
     url(r'^doreg$', views.doreg, name = 'doreg'),
+    url(r'^dolog$', views.dolog, name = 'dolog'),
+    url(r'^regok$', views.regok, name = 'regok'),
     url(r'^admin/', include(admin.site.urls)),
 )

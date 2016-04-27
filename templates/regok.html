@@ -120,10 +120,25 @@
                 window.location.href='register';
                 return false
             }
-            function log()
+            function dolog()
             {
-                var str;
-                document.getElementById("")
+                if (document.getElementById("username").value == "")
+                {
+                    str = '请输入用户名';
+                }
+                else if (document.getElementById("password").value == "")
+                {
+                    str = '请输入密码';
+                }
+                else
+                {
+                    document.getElementById("frmlog").submit();
+                    return false
+                }
+                document.getElementById("myDiv").innerHTML = "<div class=\"alert alert-error alert-dismissable\">" +
+                "   <button type=\"button\" class=\"close\" data-dismiss=\"alert\" onclick=\"cancel()\">&times;</button>" +
+                "<strong>登录失败&nbsp;</strong>"+str+"</div>";
+                return false
             }
         </script>
     </head>
@@ -170,18 +185,18 @@
                     <div class="row-fluid" id="innerblk">
                         <div class="span1 sidebar"></div>
                         <div class="span1 siderbar">
-                        <form action="reg">
+                        <form id="frmlog" action="dolog">
                             <fieldset>
                                 <legend>登录</legend>
 {#                                <label>用户名</label>#}
-                                <input type="text" placeholder="用户名">
-                                <input type="text" placeholder="密码">
+                                <input id="username" type="text" placeholder="用户名" >
+                                <input id="password" type="text" placeholder="密码" >
 {#                                <span class="help-block">Example block-level help text here.</span>#}
 {#                                <label class="checkbox">#}
 {#                                    <input type="checkbox"> Check me out#}
 {#                                </label>#}
                                 <br/>
-                                <button type="submit" class="btn btn-info">登&nbsp;录</button>
+                                <button type="submit" class="btn btn-info" onclick="return dolog()">登&nbsp;录</button>
                                 &nbsp;
                                 <button type="submit" class="btn btn-success" onclick="return toreg()">注&nbsp;册</button>
                             </fieldset>
