@@ -41,6 +41,18 @@
                 margin: 0 auto;
                 padding: 0 244px 0 304px
             }
+            .cmnt {
+                color: green;
+            }
+            .atag {
+                color: white;
+            }
+            .sideatag {
+                color: midnightblue;
+            }
+            .sidetit {
+                color: darkblue;
+            }
         </style>
 
         <script type="text/javascript">
@@ -95,24 +107,43 @@
             <div id='content' class='row-fluid'>
 
                 <div class='span8 main listc'>
+                    <ul class="pager">
+                        {% if pn == 1 %}
+                        <li class="previous disabled">
+                            <a href="#">&larr; 上一页</a>
+                        </li>
+                        {% else%}
+                        <li class="previous">
+                            <a href="show?pn={{ ppre }}">&larr; 上一页</a>
+                        </li>
+                        {% endif %}
+                        {% if pn == pcnt %}
+                        <li class="next disabled">
+                        {% else %}
+                        <li class="next">
+                        {% endif %}
+                            <a href="show?pn={{ pnxt }}">下一页 &rarr;</a>
+                        </li>
+                    </ul>
+                    {% for item in items %}
                     <div class="item row-fluid">
-
                         <div class="span1 main">
                             <img src="http://center.blueidea.com/avatar.php?uid=291426&size=small"/>
                             <br/>
                             <br/>
                             <button class="btn btn-mini btn-primary" type="button">&nbsp;订阅&nbsp;</button>
+                            <span class="badge badge-success">&nbsp;<a class="atag" href="#">12</a>&nbsp;</span>
                         </div>
                         <div class="span11 main uldiv">
                             <ul class="nav nav-tabs nav-stacked">
                                 <li>
-                                    <a href="http://www.hanfan.cc/19143.html">韩剧《戏子》中字下载 [HDTV-MKV/720P][连载/第2集]</a>
+                                    <a href="{{ item.1 }}" target="_Blank">{{ item.0 }}</a>
                                 </li>
                                 <li>
-                                    <a>更新时间: 2016年4月21日 星期四 05:41</a>
+                                    <a>更新时间: {{ item.3 }}</a>
                                 </li>
                                 <li>
-                                    <a>Another Link 3</a>
+                                    <a>来源: {{ item.2 }}</a>
                                 </li>
                             </ul>
 
@@ -120,126 +151,61 @@
                     </div>
                     <br/>
                     <br/>
-                    <div class="item row-fluid">
-                        <div class="span1 main">
-                            <img src="http://center.blueidea.com/avatar.php?uid=291426&size=small"/>
-                        </div>
-                        <div class="span11 main uldiv">
-                            <ul class="nav nav-tabs nav-stacked">
-                                <li>
-                                    <a href="http://www.hanfan.cc/19143.html">韩剧《戏子》中字下载 [HDTV-MKV/720P][连载/第2集]</a>
-                                </li>
-                                <li>
-                                    <a href='#'>更新时间: 2016年4月21日 星期四 05:41</a>
-                                </li>
-                                <li>
-                                    <a href='#'>Another Link 3</a>
-                                </li>
-                            </ul>
+                    {% endfor %}
 
-                        </div>
+                    <div class="pagination pagination-centered">
+                        <ul>
+                            {% if pn != 1 %}
+                            <li>
+                                <a href="show?pn=1">&laquo;首页</a>
+                            </li>
+                            <li>
+                                <a href="show?pn={{ ppre }}">&laquo;上一页</a>
+                            </li>
+                            {% endif %}
+                            {% for i in lim %}
+                            {% if i == pn %}
+                            <li class="active">
+                            {% else %}
+                            <li>
+                            {% endif %}
+                                <a href="show?pn={{ i }}">{{ i }}</a>
+                            </li>
+                            {% endfor %}
+                            {% if pn != pcnt %}
+                            <li>
+                                <a href="show?pn={{ pnxt }}">下一页&raquo;</a>
+                            </li>
+                            <li>
+                                <a href="show?pn={{ pcnt }}">尾页&raquo;</a>
+                            </li>
+                            {% endif %}
+                        </ul>
                     </div>
-                    <br/>
-                    <br/>
-                    <div class="item row-fluid">
-                        <div class="span1 main">
-                            <img src="http://center.blueidea.com/avatar.php?uid=291426&size=small"/>
-                            <br/>
-                            <br/>
-                            <button class="btn btn-mini" type="button">&nbsp;退订&nbsp;</button>
-                        </div>
-                        <div class="span11 main uldiv">
-                            <ul class="nav nav-tabs nav-stacked">
-                                <li>
-                                    <a href="http://www.hanfan.cc/19143.html">韩剧《戏子》中字下载 [HDTV-MKV/720P][连载/第2集]</a>
-                                </li>
-                                <li>
-                                    <a href='#'>更新时间: 2016年4月21日 星期四 05:41</a>
-                                </li>
-                                <li>
-                                    <a href='#'>Another Link 3</a>
-                                </li>
-                            </ul>
-
-                        </div>
-                    </div>
-                    <br/>
-                    <br/><div class="item row-fluid">
-                        <div class="span1 main">
-                            <img src="http://center.blueidea.com/avatar.php?uid=291426&size=small"/>
-                        </div>
-                        <div class="span11 main uldiv">
-                            <ul class="nav nav-tabs nav-stacked">
-                                <li>
-                                    <a href="http://www.hanfan.cc/19143.html">韩剧《戏子》中字下载 [HDTV-MKV/720P][连载/第2集]</a>
-                                </li>
-                                <li>
-                                    <a href='#'>更新时间: 2016年4月21日 星期四 05:41</a>
-                                </li>
-                                <li>
-                                    <a href='#'>Another Link 3</a>
-                                </li>
-                            </ul>
-
-                        </div>
-                    </div>
-                    <br/>
-                    <br/><div class="item row-fluid">
-                        <div class="span1 main">
-                            <img src="http://center.blueidea.com/avatar.php?uid=291426&size=small"/>
-                        </div>
-                        <div class="span11 main uldiv">
-                            <ul class="nav nav-tabs nav-stacked">
-                                <li>
-                                    <a href="http://www.hanfan.cc/19143.html">韩剧《戏子》中字下载 [HDTV-MKV/720P][连载/第2集]</a>
-                                </li>
-                                <li>
-                                    <a href='#'>更新时间: 2016年4月21日 星期四 05:41</a>
-                                </li>
-                                <li>
-                                    <a href='#'>Another Link 3</a>
-                                </li>
-                            </ul>
-
-                        </div>
-                    </div>
-                    <br/>
-                    <br/>
                 </div>
 
                 <div class='span1 sidebar'></div>
 
                 <div class='span3 sidebar'>
-                    <h3>热门排行</h3>
+                    <h3 class="sidetit">热门排行</h3>
                     <ul class="nav nav-tabs nav-stacked">
+                        {% for t_item in t_items %}
                         <li>
-                            <a href='#'>Another Link 1</a>
+                            <a class="sideatag" href="{{ t_item.1 }}" target="_blank">{{ t_item.0 }}</a>
                         </li>
-                        <li>
-                            <a href='#'>Another Link 2</a>
-                        </li>
-                        <li>
-                            <a href='#'>Another Link 3</a>
-                        </li>
+                        {% endfor %}
                     </ul>
 
-                    <h3>口碑排行</h3>
+                    <h3 class="sidetit">口碑排行</h3>
                     <ul class="nav nav-tabs nav-stacked">
+                        {% for h_item in h_items %}
                         <li>
-                            <a href='#'>Another Link 1</a>
+                            <a class="sideatag" href="{{ h_item.1 }}" target="_blank">{{ h_item.0 }}</a>
                         </li>
-                        <li>
-                            <a href='#'>Another Link 2</a>
-                        </li>
-                        <li>
-                            <a href='#'>Another Link 3</a>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
-
-            <div id="myDiv"></div>
-            <button type="button" onclick="loadXMLDoc('大撒比')">Warn Me</button>
 
         </div>
     </body>
