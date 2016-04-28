@@ -134,6 +134,7 @@ def logout(req):
 
     return response
 
+# 处理订阅ajax请求,写数据库
 def order(req):
     uid=req.GET["uid"]
     did=req.GET["did"]
