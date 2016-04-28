@@ -133,3 +133,14 @@ def logout(req):
     response.delete_cookie('username')
 
     return response
+
+def order(req):
+    uid=req.GET["uid"]
+    did=req.GET["did"]
+    conn = sqlite3.connect("/tmpdb/test.db")
+    print "1"
+    conn.execute("insert into od(uid, did) values(?, ?);", (uid, did,))
+    conn.commit()
+    print "done"
+
+    return
