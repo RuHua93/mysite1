@@ -126,3 +126,10 @@ def dolog(req):
         return render_to_response("login.html", {"logstat":"fail", "str":"用户名或密码不正确"},context_instance=RequestContext(req))
     # render_to_response("test.html",{},context_instance=RequestContext(req))
     return render_to_response('show.html',{},context_instance=RequestContext(req))
+
+def logout(req):
+    # 清除cookie并返回登录页
+    response = render_to_response("login.html",{},context_instance=RequestContext(req))
+    response.delete_cookie('username')
+
+    return response
