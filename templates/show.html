@@ -20,15 +20,30 @@
             .uldiv {
                 background-color: #FFFFFF;
             }
+            #wel {
+                font-size: 15px;
+                color: white;
+            }
+            #left {
+                width: 300px;
+                height: 60px;
+                position: absolute;
+                top: 0;
+                left: 40px;
+            }
+            #right {
+                position: absolute;
+                top: 0;
+                right: 80px;
+            }
+            #main {
+                height: 60px;
+                margin: 0 auto;
+                padding: 0 244px 0 304px
+            }
         </style>
 
         <script type="text/javascript">
-            function loadXMLDoc(str)
-            {
-                document.getElementById("myDiv").innerHTML = "<div class=\"alert alert-error alert-dismissable\">" +
-                "   <button type=\"button\" class=\"close\" data-dismiss=\"alert\" onclick=\"cancel()\">&times;</button>" +
-                "<strong>嘿嘿嘿!</strong>"+str+"</div>"
-            }
             function cancel()
             {
                 document.getElementById("myDiv").innerHTML = ""
@@ -42,13 +57,13 @@
                 <div class="span3 main">
                     <img src="http://ceysv.img47.wal8.com/img47/543993_20160424102125/146154346933.png" />
                 </div>
-                <div id="subtit" class="span7 sidebar">
-                    <span >|<br/>|<br/>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提供韩剧信息整合,搜索及订阅</span>
+                <div id="subtit" class="span4 sidebar">
+                    <span >|<br/>|<br/>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;提供韩剧信息整合,搜索及订阅{{ request.session.regstat }}</span>
                 </div>
-                <div class="span2 sidebar">
+                <div id="right">
                     <br/>
-                    <button class="btn btn-success" onclick="window.location.href='register'" >注册</button>
-                    <button class="btn btn-info">登录</button>
+                    <button class="btn btn-warning" >{{ username }}</button> &nbsp;
+                    <button class="btn btn-danger" onclick="window.location.href='logout'" >退出</button>
                 </div>
             </div>
             <div class='navbar' id='div1'>

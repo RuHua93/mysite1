@@ -177,6 +177,11 @@
                         <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
                         <strong>注册成功&nbsp;</strong>
                     </div>
+                {% elif logstat == "fail" %}
+                    <div class="alert alert-error alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
+                        <strong>登录失败&nbsp;{{ str }}</strong>
+                    </div>
                 {% endif %}
             </div>
             <div id='content' class='row-fluid'>
