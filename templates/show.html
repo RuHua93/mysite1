@@ -61,7 +61,7 @@
                 document.getElementById("myDiv").innerHTML = ""
             }
             function order(uid, did) {
-
+                // 使用ajax技术不刷新页面更新数据库
                 var url = "order?uid="+uid+"&did="+did;
                 var ajax = false;
                 //开始初始化XMLHttpRequest对象
