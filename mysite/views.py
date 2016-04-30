@@ -28,6 +28,17 @@ def getShow(pn):
     items = csr.fetchall()
     return items, cnt
 
+def getMyOrder(uid, pn):
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    csr = conn.cursor()
+    conn.row_factory = sqlite3.Row
+    csr.execute("select count(*) from od where uid=?", (uid,))
+    cnt = int(csr.fetchall()[0][0])
+    offset = int(pn) * 10 - 10
+    csr.execute("select * from sqlDemo, od where sqlDemo.did=od.did and od.uid=? order by time desc, ctime desc limit 10 offset ?;", (uid, offset,))
+    items = csr.fetchall()
+    return items, cnt
+
 def getOrder(uid):
     odr = []
     conn = sqlite3.connect("/tmpdb/newdb.db")
@@ -52,6 +63,8 @@ def getTopHigh():
 
 # 计算需要展示的页码范围
 def getRange(pn, pcnt):
+    if pcnt <= 10:
+        return 1, pcnt
     left = pn-4
     right = pn+5
     if pn - 4 < 1:
@@ -91,7 +104,24 @@ def show(req):
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
 def myorder(req):
-    return
+    username=req.COOKIES.get("username")
+    uid = req.COOKIES.get("uid")
+    pn = req.GET["pn"]
+    pn = int(pn)
+    items, cnt = getMyOrder(uid, pn)
+    odr = getOrder(uid)
+    # print odr
+    top_items, high_items = getTopHigh()
+    # 向上取整
+    pcnt = (cnt + 10) / 10
+    left, right = getRange(pn, pcnt)
+    lim = []
+    for i in range(left, right+1):
+        lim.append(i)
+    dic = {"pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
+           "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
+    return render_to_response('myorder.html',dic,context_instance=RequestContext(req))
+
 
 def doreg(req):
     # do reg

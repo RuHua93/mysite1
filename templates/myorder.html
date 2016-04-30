@@ -177,25 +177,17 @@
 {#                        <li>#}
 {#                            <img src="http://ceysv.img47.wal8.com/img47/543993_20160424102125/146150513412.png" alt="追韩剧网"/>#}
 {#                        </li>#}
-                        <li class="itemli active">
-                            <a href="#">资源库</a>
+                        <li>
+                            <a href="show?pn=1">资源库</a>
                         </li>
                         <li>
                             <a href="#">搜索</a>
                         </li>
-                        <li>
-                            <a href="myorder?pn=1">我的订阅</a>
+                        <li class="itemli active">
+                            <a href="#">我的订阅</a>
                         </li>
                     </ul>
                 </div>
-            </div>
-            <div id="myDiv">
-                {% if logstat == "ok" %}
-                    <div class="alert alert-success alert-dismissable">
-                        <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
-                        <strong>登录成功&nbsp;</strong>
-                    </div>
-                {% endif %}
             </div>
             <div id='content' class='row-fluid'>
 
@@ -207,7 +199,7 @@
                         </li>
                         {% else%}
                         <li class="previous">
-                            <a href="show?pn={{ ppre }}">&larr; 上一页</a>
+                            <a href="myorder?pn={{ ppre }}">&larr; 上一页</a>
                         </li>
                         {% endif %}
                         {% if pn == pcnt %}
@@ -215,7 +207,7 @@
                         {% else %}
                         <li class="next">
                         {% endif %}
-                            <a href="show?pn={{ pnxt }}">下一页 &rarr;</a>
+                            <a href="myorder?pn={{ pnxt }}">下一页 &rarr;</a>
                         </li>
                     </ul>
                     {% for item in items %}
@@ -255,10 +247,10 @@
                         <ul>
                             {% if pn != 1 %}
                             <li>
-                                <a href="show?pn=1">&laquo;首页</a>
+                                <a href="myorder?pn=1">&laquo;首页</a>
                             </li>
                             <li>
-                                <a href="show?pn={{ ppre }}">&laquo;上一页</a>
+                                <a href="myorder?pn={{ ppre }}">&laquo;上一页</a>
                             </li>
                             {% endif %}
                             {% for i in lim %}
@@ -267,15 +259,15 @@
                             {% else %}
                             <li>
                             {% endif %}
-                                <a href="show?pn={{ i }}">{{ i }}</a>
+                                <a href="myorder?pn={{ i }}">{{ i }}</a>
                             </li>
                             {% endfor %}
                             {% if pn != pcnt %}
                             <li>
-                                <a href="show?pn={{ pnxt }}">下一页&raquo;</a>
+                                <a href="myorder?pn={{ pnxt }}">下一页&raquo;</a>
                             </li>
                             <li>
-                                <a href="show?pn={{ pcnt }}">尾页&raquo;</a>
+                                <a href="myorder?pn={{ pcnt }}">尾页&raquo;</a>
                             </li>
                             {% endif %}
                         </ul>
