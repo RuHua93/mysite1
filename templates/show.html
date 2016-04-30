@@ -184,7 +184,7 @@
                             <a href="#">搜索</a>
                         </li>
                         <li>
-                            <a href="#">我的订阅</a>
+                            <a href="myorder">我的订阅</a>
                         </li>
                     </ul>
                 </div>
@@ -224,7 +224,11 @@
                             <img src="{{ item.4 }}"/>
                             <br/>
                             <br/>
+                            {% if item.0 in odr %}
+                            <button id="odbtn{{ item.0 }}" class="btn btn-mini" type="button" onclick="unorder({{ uid }},{{ item.0 }})">&nbsp;退订&nbsp;</button>
+                            {% else %}
                             <button id="odbtn{{ item.0 }}" class="btn btn-mini btn-primary" type="button" onclick="order({{ uid }},{{ item.0 }})">&nbsp;订阅&nbsp;</button>
+                            {% endif %}
                             <span class="badge badge-success">&nbsp;<a class="atag" href="#">1{{ item.8 }}</a>&nbsp;</span>
                             <span style="color:darkgreen">★&times;5.{{ item.7 }}</span>
                         </div>

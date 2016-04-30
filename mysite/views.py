@@ -28,6 +28,17 @@ def getShow(pn):
     items = csr.fetchall()
     return items, cnt
 
+def getOrder(uid):
+    odr = []
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.row_factory = sqlite3.Row
+    csr = conn.cursor()
+    csr.execute("select * from od where uid=?", (uid,))
+    items = csr.fetchall()
+    for item in items:
+        odr.append(item["did"])
+    return odr
+
 def getTopHigh():
     conn = sqlite3.connect("/tmpdb/newdb.db")
     csr = conn.cursor()
@@ -66,6 +77,8 @@ def show(req):
     pn = req.GET["pn"]
     pn = int(pn)
     items, cnt = getShow(pn)
+    odr = getOrder(uid)
+    # print odr
     top_items, high_items = getTopHigh()
     # 向上取整
     pcnt = (cnt + 10) / 10
@@ -73,9 +86,12 @@ def show(req):
     lim = []
     for i in range(left, right+1):
         lim.append(i)
-    dic = {"pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt),
+    dic = {"pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
            "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
+
+def myorder(req):
+    return
 
 def doreg(req):
     # do reg
@@ -141,6 +157,7 @@ def order(req):
     conn = sqlite3.connect("/tmpdb/newdb.db")
     conn.execute("insert into od(uid, did) values(?, ?);", (uid, did,))
     conn.commit()
+    print "done"
 
     return
 
