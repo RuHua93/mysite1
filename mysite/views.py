@@ -139,9 +139,16 @@ def order(req):
     uid=req.GET["uid"]
     did=req.GET["did"]
     conn = sqlite3.connect("/tmpdb/newdb.db")
-    print "1"
     conn.execute("insert into od(uid, did) values(?, ?);", (uid, did,))
     conn.commit()
-    print "done"
+
+    return
+
+def unorder(req):
+    uid=req.GET["uid"]
+    did=req.GET["did"]
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.execute("delete from od where uid=? and did=?;", (uid, did,))
+    conn.commit()
 
     return
