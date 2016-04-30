@@ -61,7 +61,7 @@
                 document.getElementById("myDiv").innerHTML = ""
             }
             function order(uid, did) {
-                // 使用ajax技术不刷新页面更新数据库
+                // 使用ajax不刷新页面更新数据库
                 var url = "order?uid="+uid+"&did="+did;
                 var ajax = false;
                 //开始初始化XMLHttpRequest对象
@@ -179,23 +179,23 @@
                     {% for item in items %}
                     <div class="item row-fluid">
                         <div class="span1 main">
-                            <img src="http://center.blueidea.com/avatar.php?uid=291426&size=small"/>
+                            <img src="{{ item.4 }}"/>
                             <br/>
                             <br/>
-                            <button class="btn btn-mini btn-primary" type="button" onclick="order({{ uid }},{{ item.7 }})">&nbsp;订阅&nbsp;</button>
-                            <span class="badge badge-success">&nbsp;<a class="atag" href="#">1{{ item.6 }}</a>&nbsp;</span>
-                            <span style="color:darkgreen">★&times;5.{{ item.5 }}</span>
+                            <button class="btn btn-mini btn-primary" type="button" onclick="order({{ uid }},{{ item.0 }})">&nbsp;订阅&nbsp;</button>
+                            <span class="badge badge-success">&nbsp;<a class="atag" href="#">1{{ item.8 }}</a>&nbsp;</span>
+                            <span style="color:darkgreen">★&times;5.{{ item.7 }}</span>
                         </div>
                         <div class="span11 main uldiv">
                             <ul class="nav nav-tabs nav-stacked">
                                 <li>
-                                    <a href="{{ item.1 }}" target="_Blank">{{ item.0 }}</a>
+                                    <a href="{{ item.2 }}" target="_Blank">{{ item.1 }}</a>
                                 </li>
                                 <li>
-                                    <a>更新时间: {{ item.3 }}</a>
+                                    <a>更新时间: {{ item.5 }}</a>
                                 </li>
                                 <li>
-                                    <a>来源: {{ item.2 }}</a>
+                                    <a>来源: {{ item.3 }}</a>
                                 </li>
                             </ul>
 
@@ -246,7 +246,7 @@
                     <ul class="nav nav-tabs nav-stacked">
                         {% for t_item in t_items %}
                         <li>
-                            <a class="sideatag" href="{{ t_item.1 }}" target="_blank">{{ t_item.0 }}</a>
+                            <a class="sideatag" href="{{ t_item.2 }}" target="_blank">{{ t_item.1 }}</a>
                         </li>
                         {% endfor %}
                     </ul>
@@ -257,7 +257,7 @@
                     <ul class="nav nav-tabs nav-stacked">
                         {% for h_item in h_items %}
                         <li>
-                            <a class="sideatag" href="{{ h_item.1 }}" target="_blank">{{ h_item.0 }}</a>
+                            <a class="sideatag" href="{{ h_item.2 }}" target="_blank">{{ h_item.1 }}</a>
                         </li>
                         {% endfor %}
                     </ul>

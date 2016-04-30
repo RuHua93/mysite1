@@ -18,7 +18,7 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 def getShow(pn):
-    conn = sqlite3.connect("/tmpdb/test.db")
+    conn = sqlite3.connect("/tmpdb/newdb.db")
     csr = conn.cursor()
     conn.row_factory = sqlite3.Row
     csr.execute("select count(*) from sqlDemo")
@@ -29,7 +29,7 @@ def getShow(pn):
     return items, cnt
 
 def getTopHigh():
-    conn = sqlite3.connect("/tmpdb/test.db")
+    conn = sqlite3.connect("/tmpdb/newdb.db")
     csr = conn.cursor()
     conn.row_factory = sqlite3.Row
     num = 5
@@ -82,9 +82,9 @@ def doreg(req):
     username = req.POST.get('uname')
     email = req.POST.get('uemail')
     password = req.POST.get('upwd')
-    conn = sqlite3.connect("/tmpdb/tb.db")
+    conn = sqlite3.connect("/tmpdb/newdb.db")
     csr = conn.cursor()
-    csr.execute("select * from user where username=?", (username,))
+    csr.execute("select * from user where uname=?", (username,))
     recs = csr.fetchall()
     if recs:
         return render_to_response('register.html', {"regstat":"fail", "str":"用户名已存在"},context_instance=RequestContext(req))
@@ -92,7 +92,7 @@ def doreg(req):
     recs = csr.fetchall()
     if recs:
         return render_to_response('register.html', {"regstat":"fail", "str":"该邮箱已注册"},context_instance=RequestContext(req))
-    conn.execute("insert into user(username, password, email) values(?, ?, ?);", (username, password, email,))
+    conn.execute("insert into user(uname, pwd, email) values(?, ?, ?);", (username, password, email,))
     print "done"
     conn.commit()
     return render_to_response('login.html',{"regstat":"ok"},context_instance=RequestContext(req))
@@ -108,20 +108,20 @@ def dolog(req):
     if req.method == 'POST':
         username = req.POST.get('username')
         password = req.POST.get('password')
-        conn = sqlite3.connect("/tmpdb/tb.db")
+        conn = sqlite3.connect("/tmpdb/newdb.db")
         conn.row_factory = sqlite3.Row
         csr = conn.cursor()
         print username
-        csr.execute("select id, password, username from user where username=?", (username,))
+        csr.execute("select uid, pwd, uname from user where uname=?", (username,))
         recs = csr.fetchall()
         if recs:
             print 1
             for rec in recs:
-                if rec["password"] == password:
-                    print rec["id"]
+                if rec["pwd"] == password:
+                    print rec["uid"]
                     response = HttpResponseRedirect('show?pn=1')
-                    response.set_cookie('username', rec["username"], 3600)
-                    response.set_cookie('uid', rec["id"], 3600)
+                    response.set_cookie('username', rec["uname"], 3600)
+                    response.set_cookie('uid', rec["uid"], 3600)
                     return response
         return render_to_response("login.html", {"logstat":"fail", "str":"用户名或密码不正确"},context_instance=RequestContext(req))
     # render_to_response("test.html",{},context_instance=RequestContext(req))
@@ -138,7 +138,7 @@ def logout(req):
 def order(req):
     uid=req.GET["uid"]
     did=req.GET["did"]
-    conn = sqlite3.connect("/tmpdb/test.db")
+    conn = sqlite3.connect("/tmpdb/newdb.db")
     print "1"
     conn.execute("insert into od(uid, did) values(?, ?);", (uid, did,))
     conn.commit()
