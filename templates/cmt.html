@@ -178,13 +178,7 @@
 {#                            <img src="http://ceysv.img47.wal8.com/img47/543993_20160424102125/146150513412.png" alt="追韩剧网"/>#}
 {#                        </li>#}
                         <li class="itemli active">
-                            <a href="#">资源库</a>
-                        </li>
-                        <li>
-                            <a href="#">搜索</a>
-                        </li>
-                        <li>
-                            <a href="myorder?pn=1">我的订阅</a>
+                            <a href="#">评论页</a>
                         </li>
                     </ul>
                 </div>
@@ -200,86 +194,7 @@
             <div id='content' class='row-fluid'>
 
                 <div class='span8 main listc'>
-                    <ul class="pager">
-                        {% if pn == 1 %}
-                        <li class="previous disabled">
-                            <a href="#">&larr; 上一页</a>
-                        </li>
-                        {% else%}
-                        <li class="previous">
-                            <a href="show?pn={{ ppre }}">&larr; 上一页</a>
-                        </li>
-                        {% endif %}
-                        {% if pn == pcnt %}
-                        <li class="next disabled">
-                        {% else %}
-                        <li class="next">
-                        {% endif %}
-                            <a href="show?pn={{ pnxt }}">下一页 &rarr;</a>
-                        </li>
-                    </ul>
-                    {% for item in items %}
-                    <div class="item row-fluid">
-                        <div class="span1 main">
-                            <img src="{{ item.4 }}"/>
-                            <br/>
-                            <br/>
-                            {% if item.0 in odr %}
-                            <button id="odbtn{{ item.0 }}" class="btn btn-mini" type="button" onclick="unorder({{ uid }},{{ item.0 }})">&nbsp;退订&nbsp;</button>
-                            {% else %}
-                            <button id="odbtn{{ item.0 }}" class="btn btn-mini btn-primary" type="button" onclick="order({{ uid }},{{ item.0 }})">&nbsp;订阅&nbsp;</button>
-                            {% endif %}
-                            <span class="badge badge-success">&nbsp;<a class="atag" href="cmt?uid={{ uid }}&did={{ item.0 }}">1{{ item.8 }}</a>&nbsp;</span>
-                            <span style="color:darkgreen">★&times;5.{{ item.7 }}</span>
-                        </div>
-                        <div class="span11 main uldiv">
-                            <ul class="nav nav-tabs nav-stacked">
-                                <li>
-                                    <a href="{{ item.2 }}" target="_Blank">{{ item.1 }}</a>
-                                </li>
-                                <li>
-                                    <a>更新时间: {{ item.5 }}</a>
-                                </li>
-                                <li>
-                                    <a>来源: {{ item.3 }}</a>
-                                </li>
-                            </ul>
 
-                        </div>
-                    </div>
-                    <br/>
-                    <br/>
-                    {% endfor %}
-
-                    <div class="pagination pagination-centered">
-                        <ul>
-                            {% if pn != 1 %}
-                            <li>
-                                <a href="show?pn=1">&laquo;首页</a>
-                            </li>
-                            <li>
-                                <a href="show?pn={{ ppre }}">&laquo;上一页</a>
-                            </li>
-                            {% endif %}
-                            {% for i in lim %}
-                            {% if i == pn %}
-                            <li class="active">
-                            {% else %}
-                            <li>
-                            {% endif %}
-                                <a href="show?pn={{ i }}">{{ i }}</a>
-                            </li>
-                            {% endfor %}
-                            {% if pn != pcnt %}
-                            <li>
-                                <a href="show?pn={{ pnxt }}">下一页&raquo;</a>
-                            </li>
-                            <li>
-                                <a href="show?pn={{ pcnt }}">尾页&raquo;</a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </div>
                 </div>
 
                 <div class='span1 sidebar'></div>

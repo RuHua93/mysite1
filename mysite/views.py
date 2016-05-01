@@ -84,6 +84,16 @@ def login(req):
 def register(req):
     return render_to_response('register.html',{},context_instance=RequestContext(req))
 
+
+def cmt(req):
+    username=req.COOKIES.get("username")
+    uid=req.GET["uid"]
+    did=req.GET["did"]
+    top_items, high_items = getTopHigh()
+    dic = {"username":username, "h_items":high_items, "t_items":top_items, "uid":uid, "did":did}
+
+    return render_to_response('cmt.html',dic,context_instance=RequestContext(req))
+
 def show(req):
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
@@ -199,3 +209,4 @@ def unorder(req):
     conn.commit()
 
     return
+

@@ -17,5 +17,6 @@ urlpatterns = patterns('',
     url(r'^unorder$', views.unorder, name = 'unorder'),
     url(r'^logout$', views.logout, name = 'logout'),
     url(r'^regok$', views.regok, name = 'regok'),
+    url(r'^cmt$', views.cmt, name = 'cmt'),
     url(r'^admin/', include(admin.site.urls)),
 )
