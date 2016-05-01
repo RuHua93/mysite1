@@ -210,3 +210,6 @@ def unorder(req):
 
     return
 
+def test(req):
+    return render_to_response('/static/test.txt')
+
