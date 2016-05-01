@@ -50,6 +50,17 @@ def getOrder(uid):
         odr.append(item["did"])
     return odr
 
+def getOneItem(did):
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.row_factory = sqlite3.Row
+    csr = conn.cursor()
+    csr.execute("select * from sqlDemo where did=?", (did,))
+    items = csr.fetchall()
+    ret = None
+    for item in items:
+        ret = item
+    return  ret
+
 def getTopHigh():
     conn = sqlite3.connect("/tmpdb/newdb.db")
     csr = conn.cursor()
@@ -84,13 +95,13 @@ def login(req):
 def register(req):
     return render_to_response('register.html',{},context_instance=RequestContext(req))
 
-
 def cmt(req):
     username=req.COOKIES.get("username")
     uid=req.GET["uid"]
     did=req.GET["did"]
     top_items, high_items = getTopHigh()
-    dic = {"username":username, "h_items":high_items, "t_items":top_items, "uid":uid, "did":did}
+    citem = getOneItem(did)
+    dic = {"citem":citem, "username":username, "h_items":high_items, "t_items":top_items, "uid":uid, "did":did}
 
     return render_to_response('cmt.html',dic,context_instance=RequestContext(req))
 

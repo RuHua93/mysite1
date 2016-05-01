@@ -57,6 +57,10 @@
             .sidetit {
                 color: darkblue;
             }
+            #cmtarea {
+                width: 80%;
+                height: 100px;
+            }
         </style>
 
         <script type="text/javascript">
@@ -203,15 +207,25 @@
                 <div class='span8 main listc'>
                     <br/>
                     <div class="hero-unit">
-                        <h1>Heading</h1>
-                        <p>Tagline</p>
-                        <p>
-                            <a class="btn btn-primary btn-large">
-                                Learn more
-                            </a>
-                        </p>
-                        <div id="star"></div>
-                        <div id="result"></div>
+                        <form>
+                            <h2>Heading</h2>
+                            <p>Tagline</p>
+                            <label>
+                                发表评论:<br/>
+                                <textarea id="cmtarea"></textarea>
+                            </label>
+
+                            <label>评分:&nbsp;&nbsp;
+                                <span id="star"></span>
+                            </label>
+                            <br/>
+                            <div id="result"></div>
+                            <p>
+                                <a class="btn btn-primary btn-large">
+                                    发表评论
+                                </a>
+                            </p>
+                        </form>
                     </div>
 {#                    <label for="input-id">评分</label><input id="input-id" type="number" class="rating" min=0 max=5 step=1 data-size="xs">#}
                 </div>
