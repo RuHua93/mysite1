@@ -52,14 +52,14 @@ def getOrder(uid):
 
 def getOneItem(did):
     conn = sqlite3.connect("/tmpdb/newdb.db")
-    conn.row_factory = sqlite3.Row
     csr = conn.cursor()
+    conn.row_factory = sqlite3.Row
     csr.execute("select * from sqlDemo where did=?", (did,))
     items = csr.fetchall()
     ret = None
     for item in items:
         ret = item
-    return  ret
+    return ret
 
 def getTopHigh():
     conn = sqlite3.connect("/tmpdb/newdb.db")
