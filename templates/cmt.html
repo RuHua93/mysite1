@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <link href="/static/bootstrap-combined.min.css" rel="stylesheet">
+{#<link href="/static/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />#}
+<script src="/static/Raty/js/jquery.min.js" charset="utf-8" type="text/javascript"></script>
+<script src="/static/Raty/js/jquery.raty.min.js" charset="utf-8" type="text/javascript"></script>
+{#<script src="/static/star-rating.min.js" type="text/javascript"></script>#}
     <head>
         <title>追韩剧网--整合韩剧信息</title>
         <style type='text/css'>
@@ -177,6 +181,9 @@
 {#                        <li>#}
 {#                            <img src="http://ceysv.img47.wal8.com/img47/543993_20160424102125/146150513412.png" alt="追韩剧网"/>#}
 {#                        </li>#}
+                        <li>
+                            <a href="show?pn=1">资源库</a>
+                        </li>
                         <li class="itemli active">
                             <a href="#">评论页</a>
                         </li>
@@ -194,7 +201,19 @@
             <div id='content' class='row-fluid'>
 
                 <div class='span8 main listc'>
-
+                    <br/>
+                    <div class="hero-unit">
+                        <h1>Heading</h1>
+                        <p>Tagline</p>
+                        <p>
+                            <a class="btn btn-primary btn-large">
+                                Learn more
+                            </a>
+                        </p>
+                        <div id="star"></div>
+                        <div id="result"></div>
+                    </div>
+{#                    <label for="input-id">评分</label><input id="input-id" type="number" class="rating" min=0 max=5 step=1 data-size="xs">#}
                 </div>
 
                 <div class='span1 sidebar'></div>
@@ -211,7 +230,7 @@
                         </li>
                         {% endfor %}
                     </ul>
-
+                    <br/>
 {#                    <h3 class="sidetit">口碑排行</h3>#}
                     &nbsp;<img src="/static/kb.png"/>
                     <br/><br/>
@@ -225,5 +244,18 @@
                 </div>
             </div>
         </div>
+        <script>
+            $(function(){
+                $('#result').hide();
+                $('#star').raty({
+                    path:"/static/Raty/img",
+                    hints:['糟糕', '较差', '普通', '较好', '力荐'],
+{#                    starOff: 'face-a-off.png',#}
+{#                    starOn: 'face-c.png'#}
+                    target: '#result',
+                    targetKeep: true
+                });
+            })
+        </script>
     </body>
 </html>
