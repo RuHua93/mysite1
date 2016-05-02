@@ -146,7 +146,7 @@ def show(req):
     lim = []
     for i in range(left, right+1):
         lim.append(i)
-    dic = {"pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
+    dic = {"act":"show", "pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
            "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
@@ -165,16 +165,17 @@ def myorder(req):
     lim = []
     for i in range(left, right+1):
         lim.append(i)
-    dic = {"pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
+    dic = {"act":"od", "pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
            "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
-    return render_to_response('myorder.html',dic,context_instance=RequestContext(req))
+    return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
 
 def doreg(req):
     # do reg
-    username = req.POST.get('uname')
-    email = req.POST.get('uemail')
-    password = req.POST.get('upwd')
+    username = req.POST.get('username')
+    email = req.POST.get('email')
+    password = req.POST.get('password')
+    print username, email, password
     conn = sqlite3.connect("/tmpdb/newdb.db")
     csr = conn.cursor()
     csr.execute("select * from user where uname=?", (username,))
@@ -185,7 +186,7 @@ def doreg(req):
     recs = csr.fetchall()
     if recs:
         return render_to_response('register.html', {"regstat":"fail", "str":"该邮箱已注册"},context_instance=RequestContext(req))
-    conn.execute("insert into user(uname, pwd, email) values(?, ?, ?);", (username, password, email,))
+    conn.execute("insert into user(uname, pwd, email, auth) values(?, ?, ?, ?);", (username, password, email, 0,))
     print "done"
     conn.commit()
     return render_to_response('login.html',{"regstat":"ok"},context_instance=RequestContext(req))

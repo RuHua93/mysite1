@@ -164,7 +164,7 @@
                 }
                 else
                 {
-                    window.location.href = 'doreg';
+                    document.getElementById("regform").submit();
                     return false
                 }
 
@@ -221,14 +221,14 @@
                     <div class="row-fluid" id="innerblk">
                         <div class="span1 sidebar"></div>
                         <div class="span1 siderbar">
-                        <form action="doreg" method="post" enctype="multipart/form-data">
+                        <form id="regform" action="doreg" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <fieldset>
                                 <legend>注册</legend>
 {#                                <label>用户名</label>#}
-                                <input name="uname" id="username" type="text" placeholder="用户名">
-                                <input name="uemail" id="email" type="text" placeholder="电子邮箱">
-                                <input name="upwd" id="password" type="password" placeholder="密码(6-20位)">
+                                <input name="username" id="username" type="text" placeholder="用户名">
+                                <input name="email" id="email" type="text" placeholder="电子邮箱">
+                                <input name="password" id="password" type="password" placeholder="密码(6-20位)">
                                 <input name="repeat" id="repeat" type="password" placeholder="确认密码">
 {#                                <span class="help-block">Example block-level help text here.</span>#}
 {#                                <label class="checkbox">#}

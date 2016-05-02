@@ -231,7 +231,7 @@
                         <div class="prediv">
                         <pre class="pre-scrollable">
 {% for cmt in cmts %}
-<span class="cmt-user">发布者:{{ cmt.0 }}</span>                           <span class="cmt-date">发布时间:{{ cmt.5 }}</span>
+<span class="cmt-user">发布者:{{ cmt.0 }}</span>   <span class="cmt-date">发布时间:{{ cmt.5 }}</span>
 <span class="cmt-txt">内容:{{ cmt.3 }}</span>
 _______________________________________________________________________
 {% endfor %}
@@ -253,7 +253,7 @@ _______________________________________________________________________
                             <br/>
                             <input name="result" id="result"/>
                             <p>
-                                {% if dcmted == "no" %}
+                                {% if cmted == "no" %}
                                 <button class="btn btn-info btn-large">
                                     发表评论
                                 </button>

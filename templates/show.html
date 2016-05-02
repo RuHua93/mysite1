@@ -177,6 +177,7 @@
 {#                        <li>#}
 {#                            <img src="http://ceysv.img47.wal8.com/img47/543993_20160424102125/146150513412.png" alt="追韩剧网"/>#}
 {#                        </li>#}
+                        {% if act == "show" %}
                         <li class="itemli active">
                             <a href="#">资源库</a>
                         </li>
@@ -186,6 +187,17 @@
                         <li>
                             <a href="myorder?pn=1">我的订阅</a>
                         </li>
+                        {% elif act == "od" %}
+                        <li>
+                            <a href="show?pn=1">资源库</a>
+                        </li>
+                        <li>
+                            <a href="#">搜索</a>
+                        </li>
+                        <li class="itemli active">
+                            <a href="#">我的订阅</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
