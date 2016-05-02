@@ -169,6 +169,12 @@ def myorder(req):
            "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
+def uinfo(req):
+    username=req.COOKIES.get("username")
+    uid = req.COOKIES.get("uid")
+    top_items, high_items = getTopHigh()
+    dic ={"uid":uid, "username":username, "t_items":top_items, "h_items":high_items}
+    return render_to_response('uinfo.html',dic,context_instance=RequestContext(req))
 
 def doreg(req):
     # do reg
@@ -278,4 +284,5 @@ def docmt(req):
 
 def test(req):
     return render_to_response('/static/test.txt')
+
 

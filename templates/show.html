@@ -60,6 +60,9 @@
             {
                 document.getElementById("myDiv").innerHTML = ""
             }
+            function uinfo(uid) {
+                window.location.href="uinfo?uid="+uid
+            }
             function order(uid, did) {
                 // 使用ajax不刷新页面更新数据库
                 var url = "order?uid="+uid+"&did="+did;
@@ -167,7 +170,7 @@
                 </div>
                 <div id="right">
                     <br/>
-                    <button class="btn btn-warning" >{{ username }}</button> &nbsp;
+                    <button onclick="uinfo({{ uid }})" class="btn btn-warning" >{{ username }}</button> &nbsp;
                     <button class="btn btn-danger" onclick="window.location.href='logout'" >退出</button>
                 </div>
             </div>

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <link href="/static/bootstrap-combined.min.css" rel="stylesheet">
+{#<link href="/static/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />#}
+<script src="/static/Raty/js/jquery.min.js" charset="utf-8" type="text/javascript"></script>
+<script src="/static/Raty/js/jquery.raty.min.js" charset="utf-8" type="text/javascript"></script>
+{#<script src="/static/star-rating.min.js" type="text/javascript"></script>#}
     <head>
         <title>追韩剧网--整合韩剧信息</title>
         <style type='text/css'>
@@ -53,6 +57,16 @@
             .sidetit {
                 color: darkblue;
             }
+            #cmtarea {
+                width: 80%;
+                height: 100px;
+            }
+            .prediv {
+                text-align: left;
+            }
+            .cmt-user {
+                color: red;
+            }
         </style>
 
         <script type="text/javascript">
@@ -96,6 +110,14 @@
                     btn.setAttribute("onclick", "unorder("+uid+","+did+")");
                     btn.innerHTML="&nbsp;退订&nbsp;";
                 }
+            }
+            function  stay() {
+                window.location.href="#"
+                return false
+            }
+            function goback() {
+                window.history.back(-1);
+                return false
             }
 
             function unorder(uid, did) {
@@ -180,98 +202,20 @@
                         <li>
                             <a href="show?pn=1">资源库</a>
                         </li>
-                        <li>
-                            <a href="#">搜索</a>
-                        </li>
                         <li class="itemli active">
-                            <a href="#">我的订阅</a>
+                            <a href="#">个人中心</a>
                         </li>
                     </ul>
                 </div>
             </div>
+            <div id="myDiv">
+
+            </div>
             <div id='content' class='row-fluid'>
 
                 <div class='span8 main listc'>
-                    <ul class="pager">
-                        {% if pn == 1 %}
-                        <li class="previous disabled">
-                            <a href="#">&larr; 上一页</a>
-                        </li>
-                        {% else%}
-                        <li class="previous">
-                            <a href="myorder?pn={{ ppre }}">&larr; 上一页</a>
-                        </li>
-                        {% endif %}
-                        {% if pn == pcnt %}
-                        <li class="next disabled">
-                        {% else %}
-                        <li class="next">
-                        {% endif %}
-                            <a href="myorder?pn={{ pnxt }}">下一页 &rarr;</a>
-                        </li>
-                    </ul>
-                    {% for item in items %}
-                    <div class="item row-fluid">
-                        <div class="span1 main">
-                            <img src="{{ item.4 }}"/>
-                            <br/>
-                            <br/>
-                            {% if item.0 in odr %}
-                            <button id="odbtn{{ item.0 }}" class="btn btn-mini" type="button" onclick="unorder({{ uid }},{{ item.0 }})">&nbsp;退订&nbsp;</button>
-                            {% else %}
-                            <button id="odbtn{{ item.0 }}" class="btn btn-mini btn-primary" type="button" onclick="order({{ uid }},{{ item.0 }})">&nbsp;订阅&nbsp;</button>
-                            {% endif %}
-                            <span class="badge badge-success">&nbsp;<a class="atag" href="#">1{{ item.8 }}</a>&nbsp;</span>
-                            <span style="color:darkgreen">★&times;5.{{ item.7 }}</span>
-                        </div>
-                        <div class="span11 main uldiv">
-                            <ul class="nav nav-tabs nav-stacked">
-                                <li>
-                                    <a href="{{ item.2 }}" target="_Blank">{{ item.1 }}</a>
-                                </li>
-                                <li>
-                                    <a>更新时间: {{ item.5 }}</a>
-                                </li>
-                                <li>
-                                    <a>来源: {{ item.3 }}</a>
-                                </li>
-                            </ul>
 
-                        </div>
-                    </div>
-                    <br/>
-                    <br/>
-                    {% endfor %}
 
-                    <div class="pagination pagination-centered">
-                        <ul>
-                            {% if pn != 1 %}
-                            <li>
-                                <a href="myorder?pn=1">&laquo;首页</a>
-                            </li>
-                            <li>
-                                <a href="myorder?pn={{ ppre }}">&laquo;上一页</a>
-                            </li>
-                            {% endif %}
-                            {% for i in lim %}
-                            {% if i == pn %}
-                            <li class="active">
-                            {% else %}
-                            <li>
-                            {% endif %}
-                                <a href="myorder?pn={{ i }}">{{ i }}</a>
-                            </li>
-                            {% endfor %}
-                            {% if pn != pcnt %}
-                            <li>
-                                <a href="myorder?pn={{ pnxt }}">下一页&raquo;</a>
-                            </li>
-                            <li>
-                                <a href="myorder?pn={{ pcnt }}">尾页&raquo;</a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </div>
                 </div>
 
                 <div class='span1 sidebar'></div>
@@ -288,7 +232,6 @@
                         </li>
                         {% endfor %}
                     </ul>
-
 {#                    <h3 class="sidetit">口碑排行</h3>#}
                     &nbsp;<img src="/static/kb.png"/>
                     <br/><br/>
