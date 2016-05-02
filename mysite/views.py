@@ -167,6 +167,16 @@ def show(req):
            "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
+def search(req):
+    username=req.COOKIES.get("username")
+    uid = req.COOKIES.get("uid")
+
+    top_items, high_items = getTopHigh()
+    # 向上取整
+
+    dic = {"act":"search",  "uid":uid, "username":username,"h_items":high_items, "t_items":top_items}
+    return render_to_response('search.html',dic,context_instance=RequestContext(req))
+
 def myorder(req):
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
