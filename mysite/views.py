@@ -96,6 +96,23 @@ def getCmt(uid, did):
 
     return cnt, cmts, cmted, dcmted
 
+def getUserinfo(uid):
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    csr = conn.cursor()
+    conn.row_factory = sqlite3.Row
+    csr.execute("select * from user where uid=?", (uid,))
+    uinfo = None
+    items = csr.fetchall()
+    for item in items:
+        uinfo = item
+    csr.execute("select count(*) from od where uid=?", (uid,))
+    ocnt = 0
+    items = csr.fetchall()
+    for item in items:
+        ocnt = item[0]
+
+    return uinfo, ocnt
+
 # 计算需要展示的页码范围
 def getRange(pn, pcnt):
     if pcnt <= 10:
@@ -173,7 +190,10 @@ def uinfo(req):
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
     top_items, high_items = getTopHigh()
-    dic ={"uid":uid, "username":username, "t_items":top_items, "h_items":high_items}
+    uinfo, ocnt = getUserinfo(uid)
+    print uinfo
+    dic = {"uid":uid, "username":username, "t_items":top_items, "h_items":high_items,
+          "uinfo": uinfo, "ocnt":ocnt}
     return render_to_response('uinfo.html',dic,context_instance=RequestContext(req))
 
 def doreg(req):
@@ -280,6 +300,15 @@ def docmt(req):
     conn.execute("update sqlDemo set rnum=?, rate=? where did=?", (new_rnum, new_rate, did))
     conn.commit()
     response = HttpResponseRedirect('cmt?uid='+str(uid)+'&did='+str(did))
+    return response
+
+def modemail(req):
+    uid=req.GET["uid"]
+    newemail = req.POST.get("newemail")
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.execute("update user set email=? where uid=?", (newemail, uid))
+    conn.commit()
+    response = HttpResponseRedirect("uinfo?uid="+uid)
     return response
 
 def test(req):
