@@ -125,6 +125,29 @@
             function xmodemail() {
                 document.getElementById("modemail").setAttribute("class", "hide")
             }
+            function checkmail() {
+                var str;
+                var Regex = /^(?:\w+\.?)*\w+@(?:\w+\.)*\w+$/;
+                if (document.getElementById("newemail").value == "")
+                {
+                    str = '请输入新邮箱';
+                }
+                else if (Regex.test(document.getElementById("newemail").value) == false)
+                {
+                    str = '<strong>修改失败&nbsp;</strong> 邮箱地址格式不合法';
+                }
+                else
+                {
+                    document.getElementById("modform").submit();
+                    return false
+                }
+
+                document.getElementById("myDiv").innerHTML = "<div class=\"alert alert-error alert-dismissable\">" +
+                "   <button type=\"button\" class=\"close\" data-dismiss=\"alert\" onclick=\"cancel()\">&times;</button>" +
+                ""+str+"</div>";
+
+                return false
+            }
 
             function unorder(uid, did) {
                 // 使用ajax不刷新页面更新数据库
@@ -214,6 +237,7 @@
                     </ul>
                 </div>
             </div>
+
             <div id="myDiv">
 
             </div>
@@ -239,12 +263,12 @@
                         </table>
                         <br/>
                         <div id="modemail" class="hide">
-                            <form method="post" action="modemail?uid={{ uid }}">
+                            <form id="modform" method="post" action="modemail?uid={{ uid }}">
                                 {% csrf_token %}
                                 <label>新邮箱:<br/>
                                 <input id="newemail" name="newemail" type="text"/>
                                 </label>
-                                <input type="submit" class="btn" value="提交"/>
+                                <input onclick="return checkmail()" type="submit" class="btn" value="提交"/>
                                 &nbsp;
                                 <input type="button" class="btn" value="取消" onclick="xmodemail()"/>
                             </form>
@@ -253,7 +277,7 @@
                             修改邮箱
                         </button>
                         &nbsp;&nbsp;
-                        <button class="btn btn-success btn-large">
+                        <button onclick="history.back(-1)" class="btn btn-success btn-large">
                             返回
                         </button>
                     </div>
