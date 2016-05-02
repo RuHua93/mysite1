@@ -72,6 +72,23 @@ def getTopHigh():
     high_items = csr.fetchall()
     return top_items, high_items
 
+def getCmt(uid, did):
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    csr = conn.cursor()
+    conn.row_factory = sqlite3.Row
+    csr.execute("select * from comment where did=?", (did,))
+    cnt = 0
+    cmts = csr.fetchall()
+    for cmt in cmts:
+        cnt += 1
+    csr.execute("select * from comment where did=? and uid=?", (did,uid))
+    mcmt = csr.fetchall()
+    cmted = False
+    if mcmt:
+        cmted = True
+
+    return cnt, cmts, cmted
+
 # 计算需要展示的页码范围
 def getRange(pn, pcnt):
     if pcnt <= 10:
@@ -101,7 +118,9 @@ def cmt(req):
     did=req.GET["did"]
     top_items, high_items = getTopHigh()
     citem = getOneItem(did)
-    dic = {"citem":citem, "username":username, "h_items":high_items, "t_items":top_items, "uid":uid, "did":did}
+    ccnt, cmts, cmted = getCmt(uid, did)
+    dic = {"citem":citem, "username":username, "h_items":high_items, "t_items":top_items,
+           "uid":uid, "did":did, "ccnt":ccnt, "cmts":cmts, "cmted":cmted}
 
     return render_to_response('cmt.html',dic,context_instance=RequestContext(req))
 
@@ -201,7 +220,7 @@ def logout(req):
 
     return response
 
-# 处理订阅ajax请求,写数据库
+# 处理订阅ajax请求,更新数据库
 def order(req):
     uid=req.GET["uid"]
     did=req.GET["did"]
@@ -212,6 +231,7 @@ def order(req):
 
     return
 
+# 处理退订ajax请求,更新数据库
 def unorder(req):
     uid=req.GET["uid"]
     did=req.GET["did"]
@@ -219,6 +239,9 @@ def unorder(req):
     conn.execute("delete from od where uid=? and did=?;", (uid, did,))
     conn.commit()
 
+    return
+
+def docmt(req):
     return
 
 def test(req):

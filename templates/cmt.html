@@ -108,6 +108,10 @@
                     btn.innerHTML="&nbsp;退订&nbsp;";
                 }
             }
+            function goback() {
+                window.history.back(-1);
+                return false
+            }
 
             function unorder(uid, did) {
                 // 使用ajax不刷新页面更新数据库
@@ -213,8 +217,9 @@
                         <h4>{{ citem.1 }}</h4>
                         链接:&nbsp;<a target="_blank" href="{{ citem.2 }}">{{ citem.2 }}</a><br/>
                         来源:&nbsp;{{ citem.3 }}<br/>
-                        评论数:<br/>
+                        评论数:&nbsp;{{ ccnt }}<br/>
                         <hr/>
+                        {% if ccnt != 0 %}
                         <div class="prediv">
                         <pre class="pre-scrollable">
 asdfasdfasdfasfdasf
@@ -225,27 +230,27 @@ asdfasdfasdfasfdasf
 
 
                         </pre>
-                            </div>
-                        <form>
-
+                        </div>
+                        {% endif %}
+                        <form action="docmt?uid={{ uid }}&did={{ did }}" method="post">
                             <label>
                                 发表评论:<br/>
-                                <textarea id="cmtarea"></textarea>
+                                <textarea name="cmtarea" id="cmtarea"></textarea>
                             </label>
 
                             <label>评分:&nbsp;&nbsp;
                                 <span id="star"></span>
                             </label>
                             <br/>
-                            <div id="result"></div>
+                            <input name="result" id="result"/>
                             <p>
-                                <a class="btn btn-info btn-large">
+                                <button class="btn btn-info btn-large">
                                     发表评论
-                                </a>
+                                </button>
                                 &nbsp;
-                                <a class="btn btn-success btn-large">
+                                <button onclick="return goback();" class="btn btn-success btn-large">
                                     返回
-                                </a>
+                                </button>
                             </p>
                         </form>
                     </div>
@@ -285,7 +290,7 @@ asdfasdfasdfasfdasf
                 $('#result').hide();
                 $('#star').raty({
                     path:"/static/Raty/img",
-                    hints:['糟糕', '较差', '普通', '较好', '力荐'],
+                    hints:['1', '2', '3', '4', '5'],
 {#                    starOff: 'face-a-off.png',#}
 {#                    starOn: 'face-c.png'#}
                     target: '#result',

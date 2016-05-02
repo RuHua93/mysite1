@@ -229,8 +229,8 @@
                             {% else %}
                             <button id="odbtn{{ item.0 }}" class="btn btn-mini btn-primary" type="button" onclick="order({{ uid }},{{ item.0 }})">&nbsp;订阅&nbsp;</button>
                             {% endif %}
-                            <span class="badge badge-success">&nbsp;<a class="atag" href="cmt?uid={{ uid }}&did={{ item.0 }}">1{{ item.8 }}</a>&nbsp;</span>
-                            <span style="color:darkgreen"><img src="static/Raty/img/star-on.png"/>&times;5.{{ item.7 }}</span>
+                            <span class="badge badge-success">&nbsp;<a class="atag" href="cmt?uid={{ uid }}&did={{ item.0 }}">{{ item.8 }}</a>&nbsp;</span>
+                            <span style="color:darkgreen"><img src="static/Raty/img/star-on.png"/>&times;{{ item.7 |truncatewords:"3" }}</span>
                         </div>
                         <div class="span11 main uldiv">
                             <ul class="nav nav-tabs nav-stacked">
