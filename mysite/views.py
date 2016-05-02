@@ -1,5 +1,7 @@
 #coding=utf-8
 from _threading_local import local
+
+import datetime
 from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render,render_to_response
 from django.http import HttpResponse,HttpResponseRedirect
@@ -76,18 +78,23 @@ def getCmt(uid, did):
     conn = sqlite3.connect("/tmpdb/newdb.db")
     csr = conn.cursor()
     conn.row_factory = sqlite3.Row
-    csr.execute("select * from comment where did=?", (did,))
+    csr.execute("select user.uname, comment.* from user, comment where user.uid=comment.uid and did=?", (did,))
     cnt = 0
     cmts = csr.fetchall()
     for cmt in cmts:
         cnt += 1
+    csr.execute("select * from comment where did=?", (did,))
+    dcmted = "no"
+    dcmt = csr.fetchall()
+    if dcmt:
+        dcmted = "yes"
     csr.execute("select * from comment where did=? and uid=?", (did,uid))
     mcmt = csr.fetchall()
-    cmted = False
+    cmted = "no"
     if mcmt:
-        cmted = True
+        cmted = "yes"
 
-    return cnt, cmts, cmted
+    return cnt, cmts, cmted, dcmted
 
 # 计算需要展示的页码范围
 def getRange(pn, pcnt):
@@ -118,9 +125,9 @@ def cmt(req):
     did=req.GET["did"]
     top_items, high_items = getTopHigh()
     citem = getOneItem(did)
-    ccnt, cmts, cmted = getCmt(uid, did)
+    ccnt, cmts, cmted, dcmted = getCmt(uid, did)
     dic = {"citem":citem, "username":username, "h_items":high_items, "t_items":top_items,
-           "uid":uid, "did":did, "ccnt":ccnt, "cmts":cmts, "cmted":cmted}
+           "dcmted":dcmted, "uid":uid, "did":did, "ccnt":ccnt, "cmts":cmts, "cmted":cmted}
 
     return render_to_response('cmt.html',dic,context_instance=RequestContext(req))
 
@@ -242,7 +249,31 @@ def unorder(req):
     return
 
 def docmt(req):
-    return
+    uid = req.GET["uid"]
+    did = req.GET["did"]
+    rate = float(req.POST.get("result"))
+    txt = req.POST.get("cmtarea")
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.row_factory = sqlite3.Row
+    csr = conn.cursor()
+    mydate = datetime.datetime.now().strftime("%Y-%m-%d %X")
+
+    conn.execute("insert into comment(uid, did, cmt, rate, date) values(?,?,?,?,?)",
+                 (uid, did, txt, rate, mydate))
+    conn.commit()
+    csr.execute("select * from sqlDemo where did=?", (did,))
+    recs = csr.fetchall()
+    ditem = None
+    for rec in recs:
+        ditem = rec
+    old_rnum = float(ditem["rnum"])
+    old_rate = float(ditem["rate"])
+    new_rnum = round(old_rnum + 1.0, 2)
+    new_rate = round((old_rate * old_rnum + rate) / new_rnum, 2)
+    conn.execute("update sqlDemo set rnum=?, rate=? where did=?", (new_rnum, new_rate, did))
+    conn.commit()
+    response = HttpResponseRedirect('cmt?uid='+str(uid)+'&did='+str(did))
+    return response
 
 def test(req):
     return render_to_response('/static/test.txt')

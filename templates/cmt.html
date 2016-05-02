@@ -64,6 +64,9 @@
             .prediv {
                 text-align: left;
             }
+            .cmt-user {
+                color: red;
+            }
         </style>
 
         <script type="text/javascript">
@@ -107,6 +110,10 @@
                     btn.setAttribute("onclick", "unorder("+uid+","+did+")");
                     btn.innerHTML="&nbsp;退订&nbsp;";
                 }
+            }
+            function  stay() {
+                window.location.href="#"
+                return false
             }
             function goback() {
                 window.history.back(-1);
@@ -217,22 +224,24 @@
                         <h4>{{ citem.1 }}</h4>
                         链接:&nbsp;<a target="_blank" href="{{ citem.2 }}">{{ citem.2 }}</a><br/>
                         来源:&nbsp;{{ citem.3 }}<br/>
-                        评论数:&nbsp;{{ ccnt }}<br/>
+                        评分:&nbsp;<span id="showstar"></span>
                         <hr/>
+                        评论({{ ccnt }})<br/>
                         {% if ccnt != 0 %}
                         <div class="prediv">
                         <pre class="pre-scrollable">
-asdfasdfasdfasfdasf
-afasdfsadfsadfasd
-<br/>
-afsdafasdfasdfasdf
-asdfasdfasdfasfdasf
+{% for cmt in cmts %}
+<span class="cmt-user">发布者:{{ cmt.0 }}</span>                           <span class="cmt-date">发布时间:{{ cmt.5 }}</span>
+<span class="cmt-txt">内容:{{ cmt.3 }}</span>
+_______________________________________________________________________
+{% endfor %}
 
 
                         </pre>
                         </div>
                         {% endif %}
                         <form action="docmt?uid={{ uid }}&did={{ did }}" method="post">
+                            {% csrf_token %}
                             <label>
                                 发表评论:<br/>
                                 <textarea name="cmtarea" id="cmtarea"></textarea>
@@ -244,9 +253,15 @@ asdfasdfasdfasfdasf
                             <br/>
                             <input name="result" id="result"/>
                             <p>
+                                {% if dcmted == "no" %}
                                 <button class="btn btn-info btn-large">
                                     发表评论
                                 </button>
+                                {% else %}
+                                <button onclick="return stay()" class="btn btn-info btn-large disabled">
+                                    您已发表过评论
+                                </button>
+                                {% endif %}
                                 &nbsp;
                                 <button onclick="return goback();" class="btn btn-success btn-large">
                                     返回
@@ -294,7 +309,13 @@ asdfasdfasdfasfdasf
 {#                    starOff: 'face-a-off.png',#}
 {#                    starOn: 'face-c.png'#}
                     target: '#result',
-                    targetKeep: true
+                    targetKeep: true,
+                    score: 0
+                });
+                $('#showstar').raty({
+                    path:"/static/Raty/img",
+                    score: {{ citem.7 }},
+                    readOnly: true
                 });
             })
         </script>
