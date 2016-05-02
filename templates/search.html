@@ -199,13 +199,32 @@
             <div id='content' class='row-fluid'>
 
                 <div class='span8 main listc'>
+                    <br/><br/>
                     <div class="hero-unit">
                         <h3>高级搜索</h3>
                         <hr/>
-                        <form style="width: 300px">
-                            <input name="keyword" id="keyword" type="text" placeholder="关键词" style="width: 500px">
-                            源:
+                        <form>
+                            <input name="keyword" id="keyword" type="text" placeholder="关键词" style="width: 500px"><br/>
                             <br/>
+                            <div class="controls input-append date form_datetime" data-date="1979-09-16 05:25:07" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">
+{#                                <label>时间从:</label>#}
+                                <input size="16" type="text" value="" placeholder="时间从" readonly>
+                                <span class="add-on"><i class="icon-remove"></i></span>
+                                <span class="add-on"><i class="icon-th"></i></span>
+                            </div>
+                            <br/>
+                            <div class="controls input-append date form_datetime" data-date="1979-09-16 05:25:07" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">
+{#                                <label>时间至:</label>#}
+                                <input size="16" type="text" value="" placeholder="时间至" readonly>
+                                <span class="add-on"><i class="icon-remove"></i></span>
+                                <span class="add-on"><i class="icon-th"></i></span>
+                            </div>
+                            <br/>
+                            源:&nbsp;&nbsp;韩饭网<input name="source" type="checkbox" value="韩饭网" checked>&nbsp;
+                            大连生活网<input name="source" type="checkbox" value="大连生活网" checked>&nbsp;
+                            韩剧吧<input name="source" type="checkbox" value="韩剧吧" checked>&nbsp;
+                            热播网<input name="source" type="checkbox" value="热播网" checked>
+                            <br/><br/>
                             <input type="submit" value="搜索" class="btn btn-info btn-large">
                             &nbsp;&nbsp;
                             <input type="button" value="返回" class="btn btn-success btn-large">
@@ -218,7 +237,7 @@
                                 <legend>Test</legend>
                                 <div class="control-group">
                                     <label class="control-label">DateTime Picking</label>
-                                    <div class="controls input-append date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+                                    <div class="controls input-append date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">
                                         <input size="16" type="text" value="" readonly>
                                         <span class="add-on"><i class="icon-remove"></i></span>
                                         <span class="add-on"><i class="icon-th"></i></span>
