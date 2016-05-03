@@ -140,10 +140,11 @@ def cmt(req):
     username=req.COOKIES.get("username")
     uid=req.GET["uid"]
     did=req.GET["did"]
+    auth = req.COOKIES.get("auth")
     top_items, high_items = getTopHigh()
     citem = getOneItem(did)
     ccnt, cmts, cmted, dcmted = getCmt(uid, did)
-    dic = {"citem":citem, "username":username, "h_items":high_items, "t_items":top_items,
+    dic = {"auth":auth, "citem":citem, "username":username, "h_items":high_items, "t_items":top_items,
            "dcmted":dcmted, "uid":uid, "did":did, "ccnt":ccnt, "cmts":cmts, "cmted":cmted}
 
     return render_to_response('cmt.html',dic,context_instance=RequestContext(req))
@@ -152,6 +153,7 @@ def show(req):
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
     pn = req.GET["pn"]
+    auth = req.COOKIES.get("auth")
     pn = int(pn)
     items, cnt = getShow(pn)
     odr = getOrder(uid)
@@ -163,24 +165,26 @@ def show(req):
     lim = []
     for i in range(left, right+1):
         lim.append(i)
-    dic = {"act":"show", "pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
+    dic = {"auth":auth, "act":"show", "pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
            "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
 def search(req):
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
+    auth = req.COOKIES.get("auth")
 
     top_items, high_items = getTopHigh()
     # 向上取整
 
-    dic = {"act":"search",  "uid":uid, "username":username,"h_items":high_items, "t_items":top_items}
+    dic = {"act":"search",  "uid":uid, "username":username,"h_items":high_items, "t_items":top_items, "auth":auth}
     return render_to_response('search.html',dic,context_instance=RequestContext(req))
 
 def myorder(req):
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
     pn = req.GET["pn"]
+    auth = req.COOKIES.get("auth")
     pn = int(pn)
     items, cnt = getMyOrder(uid, pn)
     odr = getOrder(uid)
@@ -192,18 +196,19 @@ def myorder(req):
     lim = []
     for i in range(left, right+1):
         lim.append(i)
-    dic = {"act":"myorder", "pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
+    dic = {"auth":auth, "act":"myorder", "pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
            "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
 def uinfo(req):
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
+    auth = req.COOKIES.get("auth")
     top_items, high_items = getTopHigh()
     uinfo, ocnt = getUserinfo(uid)
     print uinfo
     dic = {"uid":uid, "username":username, "t_items":top_items, "h_items":high_items,
-          "uinfo": uinfo, "ocnt":ocnt}
+          "uinfo": uinfo, "ocnt":ocnt, "auth":auth}
     return render_to_response('uinfo.html',dic,context_instance=RequestContext(req))
 
 def doreg(req):
@@ -242,16 +247,17 @@ def dolog(req):
         conn.row_factory = sqlite3.Row
         csr = conn.cursor()
         print username
-        csr.execute("select uid, pwd, uname from user where uname=?", (username,))
+        csr.execute("select uid, pwd, uname, auth from user where uname=?", (username,))
         recs = csr.fetchall()
         if recs:
             print 1
             for rec in recs:
                 if rec["pwd"] == password:
                     print rec["uid"]
-                    response = HttpResponseRedirect('show?pn=1')
+                    response = render_to_response('show?pn=1', {"auth":rec["auth"]})
                     response.set_cookie('username', rec["uname"], 3600)
                     response.set_cookie('uid', rec["uid"], 3600)
+                    response.set_cookie('auth', rec["auth"], 3600)
                     return response
         return render_to_response("login.html", {"logstat":"fail", "str":"用户名或密码不正确"},context_instance=RequestContext(req))
     # render_to_response("test.html",{},context_instance=RequestContext(req))
