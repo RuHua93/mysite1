@@ -161,6 +161,8 @@ def show(req):
     top_items, high_items = getTopHigh()
     # 向上取整
     pcnt = (cnt + 5) / 10
+    if pcnt == 0:
+        pcnt = 1
     left, right = getRange(pn, pcnt)
     lim = []
     for i in range(left, right+1):
@@ -192,6 +194,8 @@ def myorder(req):
     top_items, high_items = getTopHigh()
     # 向上取整
     pcnt = (cnt + 5) / 10
+    if pcnt == 0:
+        pcnt = 1
     left, right = getRange(pn, pcnt)
     lim = []
     for i in range(left, right+1):
@@ -254,7 +258,7 @@ def dolog(req):
             for rec in recs:
                 if rec["pwd"] == password:
                     print rec["uid"]
-                    response = render_to_response('show?pn=1', {"auth":rec["auth"]})
+                    response = HttpResponseRedirect('show?pn=1')
                     response.set_cookie('username', rec["uname"], 3600)
                     response.set_cookie('uid', rec["uid"], 3600)
                     response.set_cookie('auth', rec["auth"], 3600)
@@ -364,6 +368,8 @@ def dosearch(req):
     for rec in recs:
         cnt += 1
     pcnt = (cnt + 5) / 10
+    if pcnt == 0:
+        pcnt = 1
     top_items, high_items = getTopHigh()
     odr = getOrder(uid)
     left, right = getRange(pn, pcnt)
