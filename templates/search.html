@@ -279,7 +279,7 @@
                     <ul class="nav nav-tabs nav-stacked">
                         {% for t_item in t_items %}
                         <li>
-                            <a class="sideatag" href="{{ t_item.2 }}" target="_blank">{{ t_item.1 }}</a>
+                            <a class="sideatag" href="/cmt?uid={{ uid }}&did={{ t_item.0 }}" target="_blank">{{ t_item.1 }}</a>
                         </li>
                         {% endfor %}
                     </ul>
@@ -290,7 +290,7 @@
                     <ul class="nav nav-tabs nav-stacked">
                         {% for h_item in h_items %}
                         <li>
-                            <a class="sideatag" href="{{ h_item.2 }}" target="_blank">{{ h_item.1 }}</a>
+                            <a class="sideatag" href="/cmt?uid={{ uid }}&did={{ h_item.0 }}" target="_blank">{{ h_item.1 }}</a>
                         </li>
                         {% endfor %}
                     </ul>
