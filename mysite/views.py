@@ -177,10 +177,19 @@ def search(req):
     auth = req.COOKIES.get("auth")
 
     top_items, high_items = getTopHigh()
-    # 向上取整
 
     dic = {"act":"search",  "uid":uid, "username":username,"h_items":high_items, "t_items":top_items, "auth":auth}
-    return render_to_response('search.html',dic,context_instance=RequestContext(req))
+    # 开始新一次搜索,要吧之前搜索生成的cookies清掉
+    response = render_to_response('search.html',dic,context_instance=RequestContext(req))
+    response.delete_cookie("keyword")
+    response.delete_cookie("tfrom")
+    response.delete_cookie("tto")
+    for i in range(4):
+        tmp = req.COOKIES.get("src"+str(i))
+        if tmp:
+            response.delete_cookie("src"+str(i))
+
+    return response
 
 def myorder(req):
     username=req.COOKIES.get("username")
@@ -346,6 +355,8 @@ def dosearch(req):
     conn.row_factory = sqlite3.Row
     offset = int(pn) * 10 - 10
     recs = None
+    if not kwd:
+        kwd = ""
     # 生成搜索sql字符串
     sqlstr = "select * from sqlDemo where title like '%"+kwd+"%'"
     if tfr:
@@ -366,8 +377,9 @@ def dosearch(req):
         csr.execute(sqlstr)
         recs = csr.fetchall()
     cnt = 0
-    for rec in recs:
-        cnt += 1
+    if recs:
+        for rec in recs:
+            cnt += 1
     pcnt = (cnt + 5) / 10
     if pcnt == 0:
         pcnt = 1
