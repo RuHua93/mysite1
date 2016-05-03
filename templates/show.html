@@ -171,9 +171,9 @@
                 <div id="right">
                     <br/>
                     <button onclick="uinfo({{ uid }})" class="btn btn-warning" >{{ username }}</button>&nbsp;&nbsp;
-                    {% if auth == "1" %}
-                    <button class="btn btn-success" onclick="window.location.href='manage'" >管理</button>&nbsp;&nbsp;
-                    {% endif %}
+{#                    {% if auth == "1" %}#}
+{#                    <button class="btn btn-success" onclick="window.location.href='manage'" >管理</button>&nbsp;&nbsp;#}
+{#                    {% endif %}#}
                     <button class="btn btn-danger" onclick="window.location.href='logout'" >退出</button>
                 </div>
             </div>
@@ -212,6 +212,11 @@
                         </li>
                         <li>
                             <a href="myorder?pn=1">我的订阅</a>
+                        </li>
+                        {% endif %}
+                        {% if auth == "1" %}
+                        <li>
+                            <a href="usearch">用户搜索</a>
                         </li>
                         {% endif %}
                     </ul>

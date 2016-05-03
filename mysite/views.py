@@ -329,6 +329,7 @@ def dosearch(req):
     tfr = req.POST.get("tfrom")
     tto = req.POST.get("tto")
     srcs = req.REQUEST.getlist("source")
+    auth = req.COOKIES.get("auth")
     if not kwd:
         kwd = req.COOKIES.get("keyword")
         tfr = req.COOKIES.get("tfrom")
@@ -377,7 +378,7 @@ def dosearch(req):
     for i in range(left, right+1):
         lim.append(i)
     dic = {"act":"dosearch", "pn":int(pn), "uid":uid, "items":recs, "username":username, "pcnt":int(pcnt), "odr":odr,
-           "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
+           "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim, "auth":auth}
     response = render_to_response('show.html',dic,context_instance=RequestContext(req))
     response.set_cookie("keyword", kwd)
     response.set_cookie("tfrom", tfr)
