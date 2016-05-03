@@ -252,7 +252,7 @@
                         </li>
                     </ul>
                     {% for item in items %}
-                    <div class="item row-fluid">
+                    <div id="itemdiv{{ item.0 }}" class="item row-fluid">
                         <div class="span1 main">
                             <img src="{{ item.4 }}"/>
                             <br/>
@@ -277,8 +277,13 @@
                                     <a>来源: {{ item.3 }}</a>
                                 </li>
                             </ul>
+                            <div id="editdiv{{ item.0 }}">
 
+                            </div>
                         </div>
+                        {% if auth == "1" %}
+                            <a href="/cmt?uid={{ uid }}&did={{ item.0 }}&edit=1#herodiv" onclick="showedit({{ item.0 }})">[编辑]</a>
+                        {% endif %}
                     </div>
                     <br/>
                     <br/>

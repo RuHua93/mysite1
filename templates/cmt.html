@@ -74,6 +74,9 @@
             {
                 document.getElementById("myDiv").innerHTML = ""
             }
+            function uinfo(uid) {
+                window.location.href="uinfo?uid="+uid
+            }
             function order(uid, did) {
                 // 使用ajax不刷新页面更新数据库
                 var url = "order?uid="+uid+"&did="+did;
@@ -117,6 +120,19 @@
             }
             function goback() {
                 window.history.back(-1);
+                return false
+            }
+            function xedit() {
+                document.getElementById("cmtdiv").setAttribute("class", "");
+                document.getElementById("editdiv").setAttribute("class", "hide");
+            }
+            function showedit() {
+                document.getElementById("cmtdiv").setAttribute("class", "hide");
+                document.getElementById("editdiv").setAttribute("class", "");
+                return false
+            }
+            function delinfo(did) {
+                window.location.href="delinfo?did="+did;
                 return false
             }
 
@@ -189,7 +205,7 @@
                 </div>
                 <div id="right">
                     <br/>
-                    <button class="btn btn-warning" >{{ username }}</button>&nbsp;&nbsp;
+                    <button onclick="uinfo({{ uid }})" class="btn btn-warning" >{{ username }}</button>&nbsp;&nbsp;
 {#                    {% if auth == "1" %}#}
 {#                    <button class="btn btn-success" onclick="window.location.href='manage'" >管理</button>&nbsp;&nbsp;#}
 {#                    {% endif %}#}
@@ -223,12 +239,17 @@
 
                 <div class='span8 main listc'>
                     <br/>
-                    <div class="hero-unit">
+                    <div class="hero-unit" id="herodiv">
                         <h4>{{ citem.1 }}</h4>
                         链接:&nbsp;<a target="_blank" href="{{ citem.2 }}">{{ citem.2 }}</a><br/>
                         来源:&nbsp;{{ citem.3 }}<br/>
                         评分:&nbsp;<span id="showstar"></span>
                         <hr/>
+                    {% if edit != "1" %}
+                    <div id="cmtdiv">
+                    {% else %}
+                    <div id="cmtdiv" class="hide">
+                    {% endif %}
                         评论({{ ccnt }})<br/>
                         {% if ccnt != 0 %}
                         <div class="prediv">
@@ -252,6 +273,7 @@ _______________________________________________________________________
                                 <span id="star"></span>
                             </label>
                             <br/>
+
                             <input name="result" id="result"/>
                             <p>
                                 {% if cmted == "no" %}
@@ -264,11 +286,37 @@ _______________________________________________________________________
                                 </button>
                                 {% endif %}
                                 &nbsp;
+                                {% if auth == "1" %}
+                                <button onclick="return showedit()" class="btn btn-inverse btn-large">
+                                    编辑
+                                </button>
+                                &nbsp;
+                                {% endif %}
                                 <button onclick="return goback();" class="btn btn-success btn-large">
                                     返回
                                 </button>
                             </p>
                         </form>
+                        </div>
+                        {% if edit == "1" %}
+                        <div id="editdiv">
+                        {% else %}
+                        <div id="editdiv" class="hide">
+                        {% endif %}
+                            <form id="modinfo" method="post" action="modinfo?did={{ citem.0 }}">
+                                {% csrf_token %}
+                                <h3>编辑:</h3>
+                                <input id="newtit" name="newtit" type="text" style="width: 500px" placeholder="标题"/>
+                                <input id="newlink" name="newlink" type="text" style="width: 500px" placeholder="链接"/>
+                                <br/>
+                                <input type="submit" class="btn" value="提交"/>
+                                &nbsp;
+                                <input type="button" class="btn" value="取消" onclick="xedit()"/>
+                                &nbsp;
+                                <input onclick="return delinfo({{ citem.0 }})" type="button" class="btn btn-inverse    " value="删除"/>
+                                &nbsp;
+                            </form>
+                        </div>
                     </div>
 {#                    <label for="input-id">评分</label><input id="input-id" type="number" class="rating" min=0 max=5 step=1 data-size="xs">#}
                 </div>
@@ -277,7 +325,7 @@ _______________________________________________________________________
 
                 <div class='span3 sidebar'>
 {#                    <h3 class="sidetit">热门排行</h3>#}
-                    <br/><br/>
+                    <br/>
                     &nbsp;<img src="/static/rm.png"/>
                     <br/><br/>
                     <ul class="nav nav-tabs nav-stacked">

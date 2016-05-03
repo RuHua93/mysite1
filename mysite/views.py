@@ -138,13 +138,16 @@ def register(req):
 
 def cmt(req):
     username=req.COOKIES.get("username")
-    uid=req.GET["uid"]
+    uid=req.COOKIES.get("uid")
     did=req.GET["did"]
+    edit = req.GET.get("edit")
+    if not edit:
+        edit = "0"
     auth = req.COOKIES.get("auth")
     top_items, high_items = getTopHigh()
     citem = getOneItem(did)
     ccnt, cmts, cmted, dcmted = getCmt(uid, did)
-    dic = {"auth":auth, "citem":citem, "username":username, "h_items":high_items, "t_items":top_items,
+    dic = {"edit":edit, "auth":auth, "citem":citem, "username":username, "h_items":high_items, "t_items":top_items,
            "dcmted":dcmted, "uid":uid, "did":did, "ccnt":ccnt, "cmts":cmts, "cmted":cmted}
 
     return render_to_response('cmt.html',dic,context_instance=RequestContext(req))
@@ -409,6 +412,34 @@ def modemail(req):
     conn.execute("update user set email=? where uid=?", (newemail, uid))
     conn.commit()
     response = HttpResponseRedirect("uinfo?uid="+uid)
+    return response
+
+def modinfo(req):
+    uid = req.COOKIES.get("uid")
+    did = req.GET.get("did")
+    newtit = req.POST.get("newtit")
+    newlink = req.POST.get("newlink")
+    sqlstr = None
+    if newtit:
+        sqlstr = "update sqlDemo set title='"+newtit+"'"
+        if  newlink:
+            sqlstr += ", link='"+newlink+"'"
+    elif newlink:
+        sqlstr = "update sqlDemo set link='"+newlink+"'"
+    if sqlstr:
+        sqlstr += " where did="+did
+        conn = sqlite3.connect("/tmpdb/newdb.db")
+        conn.execute(sqlstr)
+        conn.commit()
+    response = HttpResponseRedirect("cmt?uid="+str(uid)+"&did="+str(did))
+    return response
+
+def delinfo(req):
+    did = req.GET.get("did")
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.execute("delete from sqlDemo where did=?", (did,))
+    conn.commit()
+    response = HttpResponseRedirect("show?pn=1")
     return response
 
 def test(req):

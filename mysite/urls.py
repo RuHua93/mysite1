@@ -22,6 +22,8 @@ urlpatterns = patterns('',
     url(r'^logout$', views.logout, name = 'logout'),
     url(r'^regok$', views.regok, name = 'regok'),
     url(r'^cmt$', views.cmt, name = 'cmt'),
+    url(r'^modinfo$', views.modinfo, name = 'modinfo'),
+    url(r'^delinfo$', views.delinfo, name = 'delinfo'),
     url(r'^modemail$', views.modemail, name = 'modemail'),
     url(r'^admin/', include(admin.site.urls)),
 )
