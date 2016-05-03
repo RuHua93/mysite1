@@ -161,6 +161,8 @@ def show(req):
     top_items, high_items = getTopHigh()
     # 向上取整
     pcnt = (cnt + 5) / 10
+    if pcnt == 0:
+        pcnt = 1
     left, right = getRange(pn, pcnt)
     lim = []
     for i in range(left, right+1):
@@ -192,6 +194,8 @@ def myorder(req):
     top_items, high_items = getTopHigh()
     # 向上取整
     pcnt = (cnt + 5) / 10
+    if pcnt == 0:
+        pcnt = 1
     left, right = getRange(pn, pcnt)
     lim = []
     for i in range(left, right+1):
@@ -364,6 +368,8 @@ def dosearch(req):
     for rec in recs:
         cnt += 1
     pcnt = (cnt + 5) / 10
+    if pcnt == 0:
+        pcnt = 1
     top_items, high_items = getTopHigh()
     odr = getOrder(uid)
     left, right = getRange(pn, pcnt)
