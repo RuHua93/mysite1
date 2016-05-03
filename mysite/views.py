@@ -158,7 +158,7 @@ def show(req):
     # print odr
     top_items, high_items = getTopHigh()
     # 向上取整
-    pcnt = (cnt + 10) / 10
+    pcnt = (cnt + 5) / 10
     left, right = getRange(pn, pcnt)
     lim = []
     for i in range(left, right+1):
@@ -187,7 +187,7 @@ def myorder(req):
     # print odr
     top_items, high_items = getTopHigh()
     # 向上取整
-    pcnt = (cnt + 10) / 10
+    pcnt = (cnt + 5) / 10
     left, right = getRange(pn, pcnt)
     lim = []
     for i in range(left, right+1):
@@ -313,14 +313,27 @@ def docmt(req):
     return response
 
 def dosearch(req):
+    username=req.COOKIES.get("username")
+    uid = req.COOKIES.get("uid")
     kwd = req.POST.get("keyword")
     tfr = req.POST.get("tfrom")
     tto = req.POST.get("tto")
     srcs = req.REQUEST.getlist("source")
+    if not kwd:
+        kwd = req.COOKIES.get("keyword")
+        tfr = req.COOKIES.get("tfrom")
+        tto = req.COOKIES.get("tto")
+        srcs = []
+        for i in range(4):
+            src = req.COOKIES.get("src"+str(i))
+            if src is not None:
+                srcs.append(str(src))
+    pn = req.GET["pn"]
     # 预设时间 2012-09-16 05:25:07
     conn = sqlite3.connect("/tmpdb/newdb.db")
-    conn.row_factory = sqlite3.Row
     csr = conn.cursor()
+    conn.row_factory = sqlite3.Row
+    offset = int(pn) * 10 - 10
     recs = None
     # 生成搜索sql字符串
     sqlstr = "select * from sqlDemo where title like '%"+kwd+"%'"
@@ -337,16 +350,31 @@ def dosearch(req):
             else:
                 sqlstr += " or "
             sqlstr += " src = '" + src + "' "
-        sqlstr += " ) "
+        sqlstr += " ) order by time desc, ctime desc limit 10 offset " + str(offset)
         print sqlstr
         csr.execute(sqlstr)
         recs = csr.fetchall()
     cnt = 0
     for rec in recs:
         cnt += 1
-    pcnt = (cnt + 10) / 10
-    pn = 1
+    pcnt = (cnt + 5) / 10
+    top_items, high_items = getTopHigh()
+    odr = getOrder(uid)
     left, right = getRange(pn, pcnt)
+    lim = []
+    for i in range(left, right+1):
+        lim.append(i)
+    dic = {"act":"dosearch", "pn":int(pn), "uid":uid, "items":recs, "username":username, "pcnt":int(pcnt), "odr":odr,
+           "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
+    response = render_to_response('show.html',dic,context_instance=RequestContext(req))
+    response.set_cookie("keyword", kwd)
+    response.set_cookie("tfrom", tfr)
+    response.set_cookie("tto", tto)
+    i = 0
+    for src in srcs:
+        response.set_cookie("src"+str(i), src)
+        i += 1
+    return response
 
 
 def modemail(req):

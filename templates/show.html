@@ -200,6 +200,16 @@
                         <li class="itemli active">
                             <a href="#">我的订阅</a>
                         </li>
+                        {% elif act == "dosearch" %}
+                        <li>
+                            <a href="show?pn=1">资源库</a>
+                        </li>
+                        <li class="active">
+                            <a href="search">搜索</a>
+                        </li>
+                        <li>
+                            <a href="myorder?pn=1">我的订阅</a>
+                        </li>
                         {% endif %}
                     </ul>
                 </div>
