@@ -190,7 +190,7 @@
                         <li>
                             <a href="myorder?pn=1">我的订阅</a>
                         </li>
-                        {% elif act == "od" %}
+                        {% elif act == "myorder" %}
                         <li>
                             <a href="show?pn=1">资源库</a>
                         </li>
@@ -222,7 +222,7 @@
                         </li>
                         {% else%}
                         <li class="previous">
-                            <a href="show?pn={{ ppre }}">&larr; 上一页</a>
+                            <a href="{{ act }}?pn={{ ppre }}">&larr; 上一页</a>
                         </li>
                         {% endif %}
                         {% if pn == pcnt %}
@@ -230,7 +230,7 @@
                         {% else %}
                         <li class="next">
                         {% endif %}
-                            <a href="show?pn={{ pnxt }}">下一页 &rarr;</a>
+                            <a href="{{ act }}?pn={{ pnxt }}">下一页 &rarr;</a>
                         </li>
                     </ul>
                     {% for item in items %}
@@ -270,10 +270,10 @@
                         <ul>
                             {% if pn != 1 %}
                             <li>
-                                <a href="show?pn=1">&laquo;首页</a>
+                                <a href="{{ act }}?pn=1">&laquo;首页</a>
                             </li>
                             <li>
-                                <a href="show?pn={{ ppre }}">&laquo;上一页</a>
+                                <a href="{{ act }}?pn={{ ppre }}">&laquo;上一页</a>
                             </li>
                             {% endif %}
                             {% for i in lim %}
@@ -282,15 +282,15 @@
                             {% else %}
                             <li>
                             {% endif %}
-                                <a href="show?pn={{ i }}">{{ i }}</a>
+                                <a href="{{ act }}?pn={{ i }}">{{ i }}</a>
                             </li>
                             {% endfor %}
                             {% if pn != pcnt %}
                             <li>
-                                <a href="show?pn={{ pnxt }}">下一页&raquo;</a>
+                                <a href="{{ act }}?pn={{ pnxt }}">下一页&raquo;</a>
                             </li>
                             <li>
-                                <a href="show?pn={{ pcnt }}">尾页&raquo;</a>
+                                <a href="{{ act }}?pn={{ pcnt }}">尾页&raquo;</a>
                             </li>
                             {% endif %}
                         </ul>

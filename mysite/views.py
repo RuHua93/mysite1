@@ -192,7 +192,7 @@ def myorder(req):
     lim = []
     for i in range(left, right+1):
         lim.append(i)
-    dic = {"act":"od", "pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
+    dic = {"act":"myorder", "pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt), "odr":odr,
            "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
@@ -312,6 +312,43 @@ def docmt(req):
     response = HttpResponseRedirect('cmt?uid='+str(uid)+'&did='+str(did))
     return response
 
+def dosearch(req):
+    kwd = req.POST.get("keyword")
+    tfr = req.POST.get("tfrom")
+    tto = req.POST.get("tto")
+    srcs = req.REQUEST.getlist("source")
+    # 预设时间 2012-09-16 05:25:07
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.row_factory = sqlite3.Row
+    csr = conn.cursor()
+    recs = None
+    # 生成搜索sql字符串
+    sqlstr = "select * from sqlDemo where title like '%"+kwd+"%'"
+    if tfr:
+        sqlstr += " and time > '" + tfr + "' "
+    if tto:
+        sqlstr += " and time < '" + tto + "' "
+    if srcs:
+        sqlstr += " and ( "
+        first = True
+        for src in srcs:
+            if first:
+                first = False
+            else:
+                sqlstr += " or "
+            sqlstr += " src = '" + src + "' "
+        sqlstr += " ) "
+        print sqlstr
+        csr.execute(sqlstr)
+        recs = csr.fetchall()
+    cnt = 0
+    for rec in recs:
+        cnt += 1
+    pcnt = (cnt + 10) / 10
+    pn = 1
+    left, right = getRange(pn, pcnt)
+
+
 def modemail(req):
     uid=req.GET["uid"]
     newemail = req.POST.get("newemail")
@@ -323,5 +360,7 @@ def modemail(req):
 
 def test(req):
     return render_to_response('/static/test.txt')
+
+
 
 

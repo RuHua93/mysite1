@@ -199,23 +199,24 @@
             <div id='content' class='row-fluid'>
 
                 <div class='span8 main listc'>
-                    <br/><br/>
+                    <br/>
                     <div class="hero-unit">
                         <h3>高级搜索</h3>
                         <hr/>
-                        <form>
+                        <form action="dosearch" method="post">
+                            {% csrf_token %}
                             <input name="keyword" id="keyword" type="text" placeholder="关键词" style="width: 500px"><br/>
                             <br/>
-                            <div class="controls input-append date form_datetime" data-date="1979-09-16 05:25:07" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">
+                            <div class="controls input-append date form_datetime" data-date="2012-09-16 05:25:07" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">
 {#                                <label>时间从:</label>#}
-                                <input size="16" type="text" value="" placeholder="时间从" readonly>
+                                <input id="tfrom" name="tfrom" size="16" type="text" value="" placeholder="时间从" >
                                 <span class="add-on"><i class="icon-remove"></i></span>
                                 <span class="add-on"><i class="icon-th"></i></span>
                             </div>
                             <br/>
-                            <div class="controls input-append date form_datetime" data-date="1979-09-16 05:25:07" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">
+                            <div class="controls input-append date form_datetime" data-date="2012-09-16 05:25:07" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">
 {#                                <label>时间至:</label>#}
-                                <input size="16" type="text" value="" placeholder="时间至" readonly>
+                                <input id="tto" name="tto" size="16" type="text" value="" placeholder="时间至">
                                 <span class="add-on"><i class="icon-remove"></i></span>
                                 <span class="add-on"><i class="icon-th"></i></span>
                             </div>
@@ -272,7 +273,7 @@
 
                 <div class='span3 sidebar'>
 {#                    <h3 class="sidetit">热门排行</h3>#}
-                    <br/><br/>
+                    <br/>
                     &nbsp;<img src="/static/rm.png"/>
                     <br/><br/>
                     <ul class="nav nav-tabs nav-stacked">
@@ -301,37 +302,37 @@
         <script type="text/javascript" src="/static/Datetime/js/bootstrap-datetimepicker.js"></script>
         <script type="text/javascript" src="/static/Datetime/js/locales/bootstrap-datetimepicker.fr.js"></script>
         <script type="text/javascript">
-    $('.form_datetime').datetimepicker({
-        //language:  'fr',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		forceParse: 0,
-        showMeridian: 1
-    });
-	$('.form_date').datetimepicker({
-        language:  'fr',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		minView: 2,
-		forceParse: 0
-    });
-	$('.form_time').datetimepicker({
-        language:  'fr',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 1,
-		minView: 0,
-		maxView: 1,
-		forceParse: 0
-    });
-    </script>
+        $('.form_datetime').datetimepicker({
+            //language:  'fr',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+        $('.form_date').datetimepicker({
+            language:  'fr',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+        $('.form_time').datetimepicker({
+            language:  'fr',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 1,
+            minView: 0,
+            maxView: 1,
+            forceParse: 0
+        });
+        </script>
     </body>
 </html>

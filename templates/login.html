@@ -192,23 +192,24 @@
                     <div class="row-fluid" id="innerblk">
                         <div class="span1 sidebar"></div>
                         <div class="span1 siderbar">
-                        <form id="frmlog" action="dolog" method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <fieldset>
-                                <legend>登录</legend>
-{#                                <label>用户名</label>#}
-                                <input name="username" id="username" type="text" placeholder="用户名" >
-                                <input name="password" id="password" type="password" placeholder="密码" >
-{#                                <span class="help-block">Example block-level help text here.</span>#}
-{#                                <label class="checkbox">#}
-{#                                    <input type="checkbox"> Check me out#}
-{#                                </label>#}
-                                <br/>
-                                <button type="submit" class="btn btn-info" onclick="return dolog()">登&nbsp;录</button>
-                                &nbsp;
-                                <button type="submit" class="btn btn-success" onclick="return toreg()">注&nbsp;册</button>
-                            </fieldset>
-                        </form></div>
+                            <form id="frmlog" action="dolog" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <legend>登录</legend>
+    {#                                <label>用户名</label>#}
+                                    <input name="username" id="username" type="text" placeholder="用户名" >
+                                    <input name="password" id="password" type="password" placeholder="密码" >
+    {#                                <span class="help-block">Example block-level help text here.</span>#}
+    {#                                <label class="checkbox">#}
+    {#                                    <input type="checkbox"> Check me out#}
+    {#                                </label>#}
+                                    <br/>
+                                    <button type="submit" class="btn btn-info" onclick="return dolog()">登&nbsp;录</button>
+                                    &nbsp;
+                                    <button type="submit" class="btn btn-success" onclick="return toreg()">注&nbsp;册</button>
+                                </fieldset>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
