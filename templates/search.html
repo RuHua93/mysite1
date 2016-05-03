@@ -62,6 +62,10 @@
             {
                 document.getElementById("myDiv").innerHTML = ""
             }
+            function goback() {
+                window.history.back(-1);
+                return false
+            }
             function uinfo(uid) {
                 window.location.href="uinfo?uid="+uid
             }
@@ -204,7 +208,7 @@
                 <div class='span8 main listc'>
                     <br/>
                     <div class="hero-unit">
-                        <h3>高级搜索</h3>
+                        <h3>剧集搜索</h3>
                         <hr/>
                         <form action="dosearch?pn=1" method="post">
                             {% csrf_token %}
@@ -231,7 +235,7 @@
                             <br/><br/>
                             <input type="submit" value="搜索" class="btn btn-info btn-large">
                             &nbsp;&nbsp;
-                            <input type="button" value="返回" class="btn btn-success btn-large">
+                            <input type="button" value="返回" onclick="return goback()" class="btn btn-success btn-large">
                         </form>
 
                     </div>
