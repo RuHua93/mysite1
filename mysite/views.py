@@ -158,8 +158,9 @@ def cmt(req):
     top_items, high_items = getTopHigh()
     citem = getOneItem(did)
     ccnt, cmts, cmted, dcmted = getCmt(uid, did)
+    # uid必须声明为int,不然删除评论逻辑会有问题
     dic = {"edit":edit, "auth":auth, "citem":citem, "username":username, "h_items":high_items, "t_items":top_items,
-           "dcmted":dcmted, "uid":uid, "did":did, "ccnt":ccnt, "cmts":cmts, "cmted":cmted}
+           "dcmted":dcmted, "uid":int(uid), "did":did, "ccnt":ccnt, "cmts":cmts, "cmted":cmted}
 
     return render_to_response('cmt.html',dic,context_instance=RequestContext(req))
 
@@ -451,10 +452,48 @@ def dosearch(req):
     return response
 
 def dousearch(req):
+    username=req.COOKIES.get("username")
+    uid = req.COOKIES.get("uid")
+    auth = req.COOKIES.get("auth")
     keyuid = req.POST.get("keyuid")
     keyuname = req.POST.get("keyuname")
+    if not keyuid:
+        keyuid = req.COOKIES.get("keyuid")
+        keyuname = req.COOKIES.get("keyuname")
+    pn = req.GET.get("pn")
     print keyuid, keyuname
-    return
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    csr = conn.cursor()
+    conn.row_factory = sqlite3.Row
+    offset = int(pn) * 10 - 10
+    recs = None
+    sqlstr = "select * from user "
+    if keyuid:
+        sqlstr += " where uid = " + str(keyuid)
+    elif keyuname:
+        sqlstr += " where uname like '%"+str(keyuname)+"%'"
+    csr.execute(sqlstr)
+    items = csr.fetchall()
+    cnt = 0
+    for item in items:
+        cnt += 1
+    pcnt = (cnt + 5) / 10
+    if pcnt == 0:
+        pcnt = 1
+    top_items, high_items = getTopHigh()
+    left, right = getRange(pn, pcnt)
+    lim = []
+    for i in range(left, right+1):
+        lim.append(i)
+    dic = {"auth":auth, "act":"dousearch", "pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt),
+           "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
+    response = render_to_response('showuser.html',dic,context_instance=RequestContext(req))
+    if keyuid:
+        response.set_cookie("keyuid", keyuid)
+    if keyuname:
+        response.set_cookie("keyuname", keyuname)
+
+    return response
 
 def modemail(req):
     uid=req.GET["uid"]

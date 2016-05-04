@@ -257,7 +257,7 @@
 {% for cmt in cmts %}
 <span class="cmt-user">发布者:{{ cmt.0 }}</span>   <span class="cmt-date">发布时间:{{ cmt.5 }}</span>
 <span class="cmt-txt">内容:{{ cmt.3 }}</span>
-_______________________________________________________________________<a href="delcmt?uid={{ cmt.1 }}&did={{ cmt.2 }}">[删除]</a>
+_______________________________________________________________________{% if auth == "1" or uid == cmt.1%}<a href="delcmt?uid={{ cmt.1 }}&did={{ cmt.2 }}">[删除]</a>{% endif %}
 {% endfor %}
                         </pre>
                         </div>

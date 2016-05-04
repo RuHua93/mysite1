@@ -73,99 +73,18 @@
             function uinfo(uid) {
                 window.location.href="uinfo?uid="+uid
             }
-            function order(uid, did) {
-                // 使用ajax不刷新页面更新数据库
-                var url = "order?uid="+uid+"&did="+did;
-                var ajax = false;
-                //开始初始化XMLHttpRequest对象
-                if (window.XMLHttpRequest) { //Mozilla 浏览器
-                    ajax = new XMLHttpRequest();
-                    if (ajax.overrideMimeType)//设置MiME类别
-                        ajax.overrideMimeType("text/xml");
-                }
-                else if (window.ActiveXObject) { // IE浏览器
-                    try {
-                        ajax = new ActiveXObject("Msxml2.XMLHTTP");
-                    } catch (e) {
-                        try {
-                            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                        } catch (e) { }
-                    }
-                }
-                if (!ajax) { // 异常，创建对象实例失败
-                    window.alert("不能创建XMLHttpRequest对象实例.");
-                    return false;
-                }
-                //通过Post方式打开连接
-                ajax.open("GET", url, true);
-                //发送GET数据,已经在URL中赋了值所以send那里只要加个空参.
-                ajax.send(null);
-                //获取执行状态
-                ajax.onreadystatechange = function () {
-                    //如果执行状态成功，那么就把返回信息写到指定的层里
-{#                    <button id="odbtn" class="btn btn-mini btn-primary" type="button" onclick="order({{ uid }},{{ item.0 }})">&nbsp;订阅&nbsp;</button>#}
-                    var btn=document.getElementById("odbtn"+did);
-                    btn.className="btn btn-mini";
-                    btn.setAttribute("onclick", "unorder("+uid+","+did+")");
-                    btn.innerHTML="&nbsp;退订&nbsp;";
-                }
+            function byuname() {
+                document.getElementById("btnuid").setAttribute("class", "btn");
+                document.getElementById("btnuname").setAttribute("class", "btn active");
+                document.getElementById("keyuid").setAttribute("name", "keyuname");
+                document.getElementById("keyuid").setAttribute("placeholder", "用户名");
             }
-
-            function unorder(uid, did) {
-                // 使用ajax不刷新页面更新数据库
-                var url = "unorder?uid="+uid+"&did="+did;
-                var ajax = false;
-                //开始初始化XMLHttpRequest对象
-                if (window.XMLHttpRequest) { //Mozilla 浏览器
-                    ajax = new XMLHttpRequest();
-                    if (ajax.overrideMimeType)//设置MiME类别
-                        ajax.overrideMimeType("text/xml");
-                }
-                else if (window.ActiveXObject) { // IE浏览器
-                    try {
-                        ajax = new ActiveXObject("Msxml2.XMLHTTP");
-                    } catch (e) {
-                        try {
-                            ajax = new ActiveXObject("Microsoft.XMLHTTP");
-                        } catch (e) { }
-                    }
-                }
-                if (!ajax) { // 异常，创建对象实例失败
-                    window.alert("不能创建XMLHttpRequest对象实例.");
-                    return false;
-                }
-                //通过Post方式打开连接
-                ajax.open("GET", url, true);
-                //发送GET数据,已经在URL中赋了值所以send那里只要加个空参.
-                ajax.send(null);
-                //获取执行状态
-                ajax.onreadystatechange = function () {
-                    //如果执行状态成功，那么就把返回信息写到指定的层里
-{#                    <button id="odbtn" class="btn btn-mini btn-primary" type="button" onclick="order({{ uid }},{{ item.0 }})">&nbsp;订阅&nbsp;</button>#}
-                    var btn=document.getElementById("odbtn"+did);
-                    btn.className="btn btn-mini btn-primary";
-                    btn.setAttribute("onclick", "order("+uid+","+did+")");
-                    btn.innerHTML="&nbsp;订阅&nbsp;";
-                }
+            function byuid() {
+                document.getElementById("btnuid").setAttribute("class", "btn active");
+                document.getElementById("btnuname").setAttribute("class", "btn");
+                document.getElementById("keyuid").setAttribute("name", "keyuid");
+                document.getElementById("keyuid").setAttribute("placeholder", "UID");
             }
-{#            function order(uid, did)#}
-{#            {#}
-{#                var xmlhttp;#}
-{#                if (window.XMLHttpRequest)#}
-{#                {#}
-{#                    xmlhttp=new XMLHttpRequest();#}
-{#                }#}
-{#                else#}
-{#                {   //for IE6, IE5#}
-{#                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");#}
-{#                }#}
-{#                xmlhttp.open("GET","order?uid="+uid+"&did="+did,false);#}
-{#                xmlhttp.send(null);#}
-{#                ajax.onreadystatechange = function () {#}
-{#                    //如果执行状态成功，那么就把返回信息写到指定的层里#}
-{#                    document.getElementById("myDiv").innerHTML="<h1>123</h1>";#}
-{#                }#}
-{#            }#}
         </script>
     </head>
 
@@ -219,12 +138,18 @@
                     <div class="hero-unit">
                         <h3>用户搜索</h3>
                         <hr/>
+                        <div class="btn-group">
+                            <button id="btnuid" class="btn active" onclick="byuid()">按UID</button>
+                            <button id="btnuname" class="btn" onclick="byuname()">按用户名</button>
+                        </div>
+                        <br/><br/>
                         <form action="dousearch?pn=1" method="post">
                             {% csrf_token %}
-                            <input name="keyuid" id="keyuid" type="text" placeholder="按UID" style="width: 500px"><br/>
+                            <div id="divuid">
+                            <input name="keyuid" id="keyuid" type="text" placeholder="UID" style="width: 500px"><br/></div>
                             <br/>
-                            <input name="keyuname" id="keyuname" type="text" placeholder="按用户名" style="width: 500px"><br/>
-                            <br/>
+{#                            <div id="divuname" class="hide">#}
+{#                            <input name="keyuname" id="keyuname" type="text" placeholder="用户名" style="width: 500px" class=""><br/></div>#}
                             <input type="submit" value="搜 索" class="btn btn-info btn-large">
                             &nbsp;&nbsp;
                             <input type="button" value="返 回" onclick="return goback()" class="btn btn-success btn-large">
@@ -233,40 +158,6 @@
                         </form>
 
                     </div>
-{#                    <div class="container">#}
-{#                        <form action="" class="form-horizontal">#}
-{#                            <fieldset>#}
-{#                                <legend>Test</legend>#}
-{#                                <div class="control-group">#}
-{#                                    <label class="control-label">DateTime Picking</label>#}
-{#                                    <div class="controls input-append date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">#}
-{#                                        <input size="16" type="text" value="" readonly>#}
-{#                                        <span class="add-on"><i class="icon-remove"></i></span>#}
-{#                                        <span class="add-on"><i class="icon-th"></i></span>#}
-{#                                    </div>#}
-{#                                    <input type="hidden" id="dtp_input1" value="" /><br/>#}
-{#                                </div>#}
-{#                                <div class="control-group">#}
-{#                                    <label class="control-label">Date Picking</label>#}
-{#                                    <div class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">#}
-{#                                        <input size="16" type="text" value="" readonly>#}
-{#                                        <span class="add-on"><i class="icon-remove"></i></span>#}
-{#                                        <span class="add-on"><i class="icon-th"></i></span>#}
-{#                                    </div>#}
-{#                                    <input type="hidden" id="dtp_input2" value="" /><br/>#}
-{#                                </div>#}
-{#                                <div class="control-group">#}
-{#                                    <label class="control-label">Time Picking</label>#}
-{#                                    <div class="controls input-append date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">#}
-{#                                        <input size="16" type="text" value="" readonly>#}
-{#                                        <span class="add-on"><i class="icon-remove"></i></span>#}
-{#                                        <span class="add-on"><i class="icon-th"></i></span>#}
-{#                                    </div>#}
-{#                                    <input type="hidden" id="dtp_input3" value="" /><br/>#}
-{#                                </div>#}
-{#                            </fieldset>#}
-{#                        </form>#}
-{#                    </div>#}
 
                 </div>
 
@@ -300,40 +191,7 @@
         </div>
         <script type="text/javascript" src="/static/Datetime/sample/jquery/jquery-1.8.3.min.js"></script>
         <script type="text/javascript" src="/static/Datetime/sample/bootstrap/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/static/Datetime/js/bootstrap-datetimepicker.js"></script>
-        <script type="text/javascript" src="/static/Datetime/js/locales/bootstrap-datetimepicker.fr.js"></script>
-        <script type="text/javascript">
-        $('.form_datetime').datetimepicker({
-            //language:  'fr',
-            weekStart: 1,
-            todayBtn:  1,
-            autoclose: 1,
-            todayHighlight: 1,
-            startView: 2,
-            forceParse: 0,
-            showMeridian: 1
-        });
-        $('.form_date').datetimepicker({
-            language:  'fr',
-            weekStart: 1,
-            todayBtn:  1,
-            autoclose: 1,
-            todayHighlight: 1,
-            startView: 2,
-            minView: 2,
-            forceParse: 0
-        });
-        $('.form_time').datetimepicker({
-            language:  'fr',
-            weekStart: 1,
-            todayBtn:  1,
-            autoclose: 1,
-            todayHighlight: 1,
-            startView: 1,
-            minView: 0,
-            maxView: 1,
-            forceParse: 0
-        });
-        </script>
+
+
     </body>
 </html>
