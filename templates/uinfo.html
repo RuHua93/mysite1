@@ -266,7 +266,7 @@
                         </table>
                         <br/>
                         <div id="modemail" class="hide">
-                            <form id="modform" method="post" action="modemail?uid={{ uid }}">
+                            <form id="modform" method="post" action="modemail?uid={{ suid }}">
                                 {% csrf_token %}
                                 <label>新邮箱:<br/>
                                 <input id="newemail" name="newemail" type="text"/>

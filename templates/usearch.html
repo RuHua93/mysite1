@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<link href="/static/bootstrap-combined.min.css" rel="stylesheet">
+<link href="/static/Datetime/sample/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/Datetime/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <head>
         <title>追韩剧网--整合韩剧信息</title>
         <style type='text/css'>
@@ -53,12 +54,21 @@
             .sidetit {
                 color: darkblue;
             }
+            .ulist {
+                font-size: 18px;
+                text-decoration: underline;
+            }
         </style>
+        <script href="/static/Datetime/js/bootstrap-datetimepicker.min.js"></script>
 
         <script type="text/javascript">
             function cancel()
             {
                 document.getElementById("myDiv").innerHTML = ""
+            }
+            function goback() {
+                window.history.back(-1);
+                return false
             }
             function uinfo(uid) {
                 window.location.href="uinfo?uid="+uid
@@ -183,27 +193,6 @@
 {#                        <li>#}
 {#                            <img src="http://ceysv.img47.wal8.com/img47/543993_20160424102125/146150513412.png" alt="追韩剧网"/>#}
 {#                        </li>#}
-                        {% if act == "show" %}
-                        <li class="itemli active">
-                            <a href="#">资源库</a>
-                        </li>
-                        <li>
-                            <a href="search">搜索</a>
-                        </li>
-                        <li>
-                            <a href="myorder?pn=1">我的订阅</a>
-                        </li>
-                        {% elif act == "myorder" %}
-                        <li>
-                            <a href="show?pn=1">资源库</a>
-                        </li>
-                        <li>
-                            <a href="search">搜索</a>
-                        </li>
-                        <li class="itemli active">
-                            <a href="#">我的订阅</a>
-                        </li>
-                        {% elif act == "dosearch" %}
                         <li>
                             <a href="show?pn=1">资源库</a>
                         </li>
@@ -213,111 +202,72 @@
                         <li>
                             <a href="myorder?pn=1">我的订阅</a>
                         </li>
-                        {% endif %}
                         {% if auth == "1" %}
                         <li>
-                            <a href="usearch">用户搜索</a>
+                            <a href="#">用户搜索</a>
                         </li>
                         {% endif %}
                     </ul>
                 </div>
             </div>
             <div id="myDiv">
-                {% if logstat == "ok" %}
-                    <div class="alert alert-success alert-dismissable">
-                        <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
-                        <strong>登录成功&nbsp;</strong>
-                    </div>
-                {% endif %}
             </div>
             <div id='content' class='row-fluid'>
 
                 <div class='span8 main listc'>
-                    <ul class="pager">
-                        {% if pn == 1 %}
-                        <li class="previous disabled">
-                            <a href="#">&larr; 上一页</a>
-                        </li>
-                        {% else%}
-                        <li class="previous">
-                            <a href="{{ act }}?pn={{ ppre }}">&larr; 上一页</a>
-                        </li>
-                        {% endif %}
-                        {% if pn == pcnt %}
-                        <li class="next disabled">
-                        {% else %}
-                        <li class="next">
-                        {% endif %}
-                            <a href="{{ act }}?pn={{ pnxt }}">下一页 &rarr;</a>
-                        </li>
-                    </ul>
-                    {% for item in items %}
-                    <div id="itemdiv{{ item.0 }}" class="item row-fluid">
-                        <div class="span1 main">
-                            <img src="{{ item.4 }}"/>
-                            <br/>
-                            <br/>
-                            {% if item.0 in odr %}
-                            <button id="odbtn{{ item.0 }}" class="btn btn-mini" type="button" onclick="unorder({{ uid }},{{ item.0 }})">&nbsp;退订&nbsp;</button>
-                            {% else %}
-                            <button id="odbtn{{ item.0 }}" class="btn btn-mini btn-primary" type="button" onclick="order({{ uid }},{{ item.0 }})">&nbsp;订阅&nbsp;</button>
-                            {% endif %}
-                            <span class="badge badge-success">&nbsp;<a class="atag" href="cmt?uid={{ uid }}&did={{ item.0 }}">{{ item.8 }}</a>&nbsp;</span>
-                            <span style="color:darkgreen"><img src="static/Raty/img/star-on.png"/>&times;{{ item.7 |truncatewords:"3" }}</span>
-                        </div>
-                        <div class="span11 main uldiv">
-                            <ul class="nav nav-tabs nav-stacked">
-                                <li>
-                                    <a href="{{ item.2 }}" target="_Blank">{{ item.1 }}</a>
-                                </li>
-                                <li>
-                                    <a>更新时间: {{ item.5 }}</a>
-                                </li>
-                                <li>
-                                    <a>来源: {{ item.3 }}</a>
-                                </li>
-                            </ul>
-                            <div id="editdiv{{ item.0 }}">
-
-                            </div>
-                        </div>
-                        {% if auth == "1" %}
-                            <a href="/cmt?uid={{ uid }}&did={{ item.0 }}&edit=1#herodiv" onclick="showedit({{ item.0 }})">[编辑]</a>
-                        {% endif %}
-                    </div>
                     <br/>
-                    <br/>
-                    {% endfor %}
+                    <div class="hero-unit">
+                        <h3>用户搜索</h3>
+                        <hr/>
+                        <form action="dousearch?pn=1" method="post">
+                            {% csrf_token %}
+                            <input name="keyuid" id="keyuid" type="text" placeholder="按UID" style="width: 500px"><br/>
+                            <br/>
+                            <input name="keyuname" id="keyuname" type="text" placeholder="按用户名" style="width: 500px"><br/>
+                            <br/>
+                            <input type="submit" value="搜 索" class="btn btn-info btn-large">
+                            &nbsp;&nbsp;
+                            <input type="button" value="返 回" onclick="return goback()" class="btn btn-success btn-large">
+                            &nbsp;&nbsp;
+                            <a class="ulist" href="showuser?pn=1">用户列表</a>
+                        </form>
 
-                    <div class="pagination pagination-centered">
-                        <ul>
-                            {% if pn != 1 %}
-                            <li>
-                                <a href="{{ act }}?pn=1">&laquo;首页</a>
-                            </li>
-                            <li>
-                                <a href="{{ act }}?pn={{ ppre }}">&laquo;上一页</a>
-                            </li>
-                            {% endif %}
-                            {% for i in lim %}
-                            {% if i == pn %}
-                            <li class="active">
-                            {% else %}
-                            <li>
-                            {% endif %}
-                                <a href="{{ act }}?pn={{ i }}">{{ i }}</a>
-                            </li>
-                            {% endfor %}
-                            {% if pn != pcnt %}
-                            <li>
-                                <a href="{{ act }}?pn={{ pnxt }}">下一页&raquo;</a>
-                            </li>
-                            <li>
-                                <a href="{{ act }}?pn={{ pcnt }}">尾页&raquo;</a>
-                            </li>
-                            {% endif %}
-                        </ul>
                     </div>
+{#                    <div class="container">#}
+{#                        <form action="" class="form-horizontal">#}
+{#                            <fieldset>#}
+{#                                <legend>Test</legend>#}
+{#                                <div class="control-group">#}
+{#                                    <label class="control-label">DateTime Picking</label>#}
+{#                                    <div class="controls input-append date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">#}
+{#                                        <input size="16" type="text" value="" readonly>#}
+{#                                        <span class="add-on"><i class="icon-remove"></i></span>#}
+{#                                        <span class="add-on"><i class="icon-th"></i></span>#}
+{#                                    </div>#}
+{#                                    <input type="hidden" id="dtp_input1" value="" /><br/>#}
+{#                                </div>#}
+{#                                <div class="control-group">#}
+{#                                    <label class="control-label">Date Picking</label>#}
+{#                                    <div class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">#}
+{#                                        <input size="16" type="text" value="" readonly>#}
+{#                                        <span class="add-on"><i class="icon-remove"></i></span>#}
+{#                                        <span class="add-on"><i class="icon-th"></i></span>#}
+{#                                    </div>#}
+{#                                    <input type="hidden" id="dtp_input2" value="" /><br/>#}
+{#                                </div>#}
+{#                                <div class="control-group">#}
+{#                                    <label class="control-label">Time Picking</label>#}
+{#                                    <div class="controls input-append date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">#}
+{#                                        <input size="16" type="text" value="" readonly>#}
+{#                                        <span class="add-on"><i class="icon-remove"></i></span>#}
+{#                                        <span class="add-on"><i class="icon-th"></i></span>#}
+{#                                    </div>#}
+{#                                    <input type="hidden" id="dtp_input3" value="" /><br/>#}
+{#                                </div>#}
+{#                            </fieldset>#}
+{#                        </form>#}
+{#                    </div>#}
+
                 </div>
 
                 <div class='span1 sidebar'></div>
@@ -348,5 +298,42 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript" src="/static/Datetime/sample/jquery/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="/static/Datetime/sample/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/static/Datetime/js/bootstrap-datetimepicker.js"></script>
+        <script type="text/javascript" src="/static/Datetime/js/locales/bootstrap-datetimepicker.fr.js"></script>
+        <script type="text/javascript">
+        $('.form_datetime').datetimepicker({
+            //language:  'fr',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+        $('.form_date').datetimepicker({
+            language:  'fr',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+        $('.form_time').datetimepicker({
+            language:  'fr',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 1,
+            minView: 0,
+            maxView: 1,
+            forceParse: 0
+        });
+        </script>
     </body>
 </html>

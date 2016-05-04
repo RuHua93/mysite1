@@ -30,6 +30,17 @@ def getShow(pn):
     items = csr.fetchall()
     return items, cnt
 
+def getShowUser(pn):
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    csr = conn.cursor()
+    conn.row_factory = sqlite3.Row
+    csr.execute("select count(*) from user")
+    cnt = int(csr.fetchall()[0][0])
+    offset = int(pn) * 10 - 10
+    csr.execute("select * from user order by uid limit 10 offset ?", (offset,))
+    items = csr.fetchall()
+    return items, cnt
+
 def getMyOrder(uid, pn):
     conn = sqlite3.connect("/tmpdb/newdb.db")
     csr = conn.cursor()
@@ -174,6 +185,27 @@ def show(req):
            "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
+def showuser(req):
+    username=req.COOKIES.get("username")
+    uid = req.COOKIES.get("uid")
+    pn = req.GET["pn"]
+    auth = req.COOKIES.get("auth")
+    pn = int(pn)
+    items, cnt = getShowUser(pn)
+    # print odr
+    top_items, high_items = getTopHigh()
+    # 向上取整
+    pcnt = (cnt + 5) / 10
+    if pcnt == 0:
+        pcnt = 1
+    left, right = getRange(pn, pcnt)
+    lim = []
+    for i in range(left, right+1):
+        lim.append(i)
+    dic = {"auth":auth, "act":"showuser", "pn":int(pn), "uid":uid, "items":items, "username":username, "pcnt":int(pcnt),
+           "h_items":high_items, "t_items":top_items, "ppre":int(pn)-1, "pnxt":int(pn)+1, "lim":lim}
+    return render_to_response('showuser.html',dic,context_instance=RequestContext(req))
+
 def search(req):
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
@@ -192,6 +224,19 @@ def search(req):
         if tmp:
             response.delete_cookie("src"+str(i))
 
+    return response
+
+def usearch(req):
+    username=req.COOKIES.get("username")
+    uid = req.COOKIES.get("uid")
+    auth = req.COOKIES.get("auth")
+    top_items, high_items = getTopHigh()
+    dic = {"act":"usearch",  "uid":uid, "username":username,"h_items":high_items, "t_items":top_items,
+           "auth":auth}
+    # 开始新一次搜索,要吧之前搜索生成的cookies清掉
+    response = render_to_response('usearch.html',dic,context_instance=RequestContext(req))
+    response.delete_cookie("keyuname")
+    response.delete_cookie("keyuid")
     return response
 
 def myorder(req):
@@ -219,12 +264,13 @@ def myorder(req):
 def uinfo(req):
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
+    suid = req.GET.get("uid")
     auth = req.COOKIES.get("auth")
     top_items, high_items = getTopHigh()
     uinfo, ocnt = getUserinfo(uid)
     print uinfo
     dic = {"uid":uid, "username":username, "t_items":top_items, "h_items":high_items,
-          "uinfo": uinfo, "ocnt":ocnt, "auth":auth}
+          "uinfo": uinfo, "ocnt":ocnt, "auth":auth, "suid":suid}
     return render_to_response('uinfo.html',dic,context_instance=RequestContext(req))
 
 def doreg(req):
@@ -404,6 +450,11 @@ def dosearch(req):
         i += 1
     return response
 
+def dousearch(req):
+    keyuid = req.POST.get("keyuid")
+    keyuname = req.POST.get("keyuname")
+    print keyuid, keyuname
+    return
 
 def modemail(req):
     uid=req.GET["uid"]
