@@ -405,6 +405,7 @@ def dosearch(req):
     conn.row_factory = sqlite3.Row
     offset = int(pn) * 10 - 10
     recs = None
+    cnt = 0
     if not kwd:
         kwd = ""
     # 生成搜索sql字符串
@@ -422,14 +423,16 @@ def dosearch(req):
             else:
                 sqlstr += " or "
             sqlstr += " src = '" + src + "' "
-        sqlstr += " ) order by time desc, ctime desc limit 10 offset " + str(offset)
+        sqlstr += " ) order by time desc, ctime desc "
         print sqlstr
+        sqlstrlim = sqlstr + "limit 10 offset " + str(offset)
         csr.execute(sqlstr)
+        recall = csr.fetchall()
+        if recall:
+            for eachrec in recall:
+                cnt += 1
+        csr.execute(sqlstrlim)
         recs = csr.fetchall()
-    cnt = 0
-    if recs:
-        for rec in recs:
-            cnt += 1
     pcnt = (cnt + 5) / 10
     if pcnt == 0:
         pcnt = 1
