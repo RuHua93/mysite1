@@ -478,6 +478,7 @@ def dousearch(req):
     else:
         sqlstr += " where uname like '%"+str(keyuid)+"%'"
     print sqlstr
+    sqlstrlim = sqlstr + "limit 10 offset " + str(offset)
     csr.execute(sqlstr)
     items = csr.fetchall()
     cnt = 0
@@ -486,6 +487,8 @@ def dousearch(req):
     pcnt = (cnt + 5) / 10
     if pcnt == 0:
         pcnt = 1
+    csr.execute(sqlstrlim)
+    items = csr.fetchall()
     top_items, high_items = getTopHigh()
     left, right = getRange(pn, pcnt)
     lim = []
