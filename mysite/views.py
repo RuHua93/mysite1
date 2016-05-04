@@ -266,14 +266,19 @@ def myorder(req):
 
 def uinfo(req):
     username=req.COOKIES.get("username")
-    uid = req.COOKIES.get("uid")
+    uid = req.GET.get("uid")
     suid = req.GET.get("uid")
+    err = req.GET.get("err")
+    if err:
+        err = str(err)
+    else:
+        err = ""
     auth = req.COOKIES.get("auth")
     top_items, high_items = getTopHigh()
     uinfo, ocnt = getUserinfo(uid)
     print uinfo
     dic = {"uid":uid, "username":username, "t_items":top_items, "h_items":high_items,
-          "uinfo": uinfo, "ocnt":ocnt, "auth":auth, "suid":suid}
+          "uinfo": uinfo, "ocnt":ocnt, "auth":auth, "suid":suid, "err":err}
     return render_to_response('uinfo.html',dic,context_instance=RequestContext(req))
 
 def doreg(req):
@@ -507,9 +512,31 @@ def dousearch(req):
 def modemail(req):
     uid=req.GET["uid"]
     newemail = req.POST.get("newemail")
+    newuname = req.POST.get("newuname")
     conn = sqlite3.connect("/tmpdb/newdb.db")
-    conn.execute("update user set email=? where uid=?", (newemail, uid))
-    conn.commit()
+    conn.row_factory = sqlite3.Row
+    csr = conn.cursor()
+    csr.execute("select * from user where uname=?", (newuname,))
+    unames = csr.fetchall()
+    if unames:
+        response = HttpResponseRedirect("uinfo?uid="+uid+"&err=exuname")
+        return response
+    csr.execute("select * from user where email=?", (newemail,))
+    emails = csr.fetchall()
+    if emails:
+        response = HttpResponseRedirect("uinfo?uid="+uid+"&err=exemail")
+        return response
+    sqlstr = None
+    if newemail:
+        sqlstr = "update user set email='"+newemail+"'"
+        if newuname:
+            sqlstr += ",uname='"+newuname+"'"
+    elif newuname:
+        sqlstr = "update user set uname='"+newuname+"'"
+    if sqlstr != None:
+        sqlstr += " where uid="+uid
+        conn.execute(sqlstr)
+        conn.commit()
     response = HttpResponseRedirect("uinfo?uid="+uid)
     return response
 
@@ -533,7 +560,7 @@ def modinfo(req):
     response = HttpResponseRedirect("cmt?uid="+str(uid)+"&did="+str(did))
     return response
 
-def moduser(req):
+def domodu(req):
     muid=req.GET.get("muid")
     return
 

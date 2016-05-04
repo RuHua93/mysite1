@@ -128,11 +128,7 @@
             function checkmail() {
                 var str;
                 var Regex = /^(?:\w+\.?)*\w+@(?:\w+\.)*\w+$/;
-                if (document.getElementById("newemail").value == "")
-                {
-                    str = '请输入新邮箱';
-                }
-                else if (Regex.test(document.getElementById("newemail").value) == false)
+                if ((document.getElementById("newemail").value != "") && (Regex.test(document.getElementById("newemail").value) == false))
                 {
                     str = '<strong>修改失败&nbsp;</strong> 邮箱地址格式不合法';
                 }
@@ -242,16 +238,31 @@
             </div>
 
             <div id="myDiv">
-
+                {% if err == "exemail" %}
+                <div class="alert alert-error alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
+                    <strong>修改失败</strong>&nbsp;邮箱已被注册
+                </div>
+                {% elif err == "exuname" %}
+                <div class="alert alert-error alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
+                    <strong>修改失败</strong>&nbsp;用户名已存在
+                </div>
+                {% endif %}
             </div>
             <div id='content' class='row-fluid'>
 
                 <div class='span8 main listc'>
                     <br/>
                     <div class="hero-unit">
-                        <h3>{{ username }}的个人信息</h3>
+                        <h3>{{ uinfo.1 }}的个人信息</h3>
                         <hr/>
                         <table class="table table-striped table-bordered info">
+                            {% if auth == "1" %}
+                            <tr>
+                                <td>UID</td><td>{{ uinfo.0 }}</td>
+                            </tr>
+                            {% endif %}
                             <tr>
                                 <td>用户名</td><td>{{ uinfo.1 }}</td>
                             </tr>
@@ -268,6 +279,9 @@
                         <div id="modemail" class="hide">
                             <form id="modform" method="post" action="modemail?uid={{ suid }}">
                                 {% csrf_token %}
+                                <label>新用户名:<br/>
+                                <input id="newuname" name="newuname" type="text"/>
+                                </label>
                                 <label>新邮箱:<br/>
                                 <input id="newemail" name="newemail" type="text"/>
                                 </label>
@@ -277,12 +291,18 @@
                             </form>
                         </div>
                         <br/>
+                        {% if auth != "1" %}
                         <button class="btn btn-info btn-large" onclick="modemail()">
-                            修改邮箱
+                            修改信息
                         </button>
+                        {% else %}
+                        <button class="btn btn-inverse btn-large" onclick="modemail()">
+                            编&nbsp;辑
+                        </button>
+                        {% endif %}
                         &nbsp;&nbsp;
                         <button onclick="history.back(-1)" class="btn btn-success btn-large">
-                            返回
+                            返&nbsp;回
                         </button>
                     </div>
 
