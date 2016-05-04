@@ -533,6 +533,10 @@ def modinfo(req):
     response = HttpResponseRedirect("cmt?uid="+str(uid)+"&did="+str(did))
     return response
 
+def moduser(req):
+    muid=req.GET.get("muid")
+    return
+
 def delinfo(req):
     did = req.GET.get("did")
     conn = sqlite3.connect("/tmpdb/newdb.db")
