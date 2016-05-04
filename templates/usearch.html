@@ -76,13 +76,13 @@
             function byuname() {
                 document.getElementById("btnuid").setAttribute("class", "btn");
                 document.getElementById("btnuname").setAttribute("class", "btn active");
-                document.getElementById("keyuid").setAttribute("name", "keyuname");
+                document.getElementById("stype").setAttribute("value", "byuname");
                 document.getElementById("keyuid").setAttribute("placeholder", "用户名");
             }
             function byuid() {
                 document.getElementById("btnuid").setAttribute("class", "btn active");
                 document.getElementById("btnuname").setAttribute("class", "btn");
-                document.getElementById("keyuid").setAttribute("name", "keyuid");
+                document.getElementById("stype").setAttribute("value", "byuid");
                 document.getElementById("keyuid").setAttribute("placeholder", "UID");
             }
         </script>
@@ -148,6 +148,9 @@
                             <div id="divuid">
                             <input name="keyuid" id="keyuid" type="text" placeholder="UID" style="width: 500px"><br/></div>
                             <br/>
+                            <div class="hide">
+                            <input name="stype" id="stype" value="byuid" type="text">
+                            </div>
 {#                            <div id="divuname" class="hide">#}
 {#                            <input name="keyuname" id="keyuname" type="text" placeholder="用户名" style="width: 500px" class=""><br/></div>#}
                             <input type="submit" value="搜 索" class="btn btn-info btn-large">

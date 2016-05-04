@@ -126,6 +126,8 @@ def getUserinfo(uid):
 
 # 计算需要展示的页码范围
 def getRange(pn, pcnt):
+    pn = int(pn)
+    pcnt = int(pcnt)
     if pcnt <= 10:
         return 1, pcnt
     left = pn-4
@@ -459,22 +461,23 @@ def dousearch(req):
     uid = req.COOKIES.get("uid")
     auth = req.COOKIES.get("auth")
     keyuid = req.POST.get("keyuid")
-    keyuname = req.POST.get("keyuname")
+    stype = req.POST.get("stype")
     if not keyuid:
         keyuid = req.COOKIES.get("keyuid")
-        keyuname = req.COOKIES.get("keyuname")
+        stype = req.COOKIES.get("stype")
     pn = req.GET.get("pn")
-    print keyuid, keyuname
+    print keyuid, stype
     conn = sqlite3.connect("/tmpdb/newdb.db")
     csr = conn.cursor()
     conn.row_factory = sqlite3.Row
     offset = int(pn) * 10 - 10
     recs = None
     sqlstr = "select * from user "
-    if keyuid:
+    if stype == "byuid":
         sqlstr += " where uid = " + str(keyuid)
-    elif keyuname:
-        sqlstr += " where uname like '%"+str(keyuname)+"%'"
+    else:
+        sqlstr += " where uname like '%"+str(keyuid)+"%'"
+    print sqlstr
     csr.execute(sqlstr)
     items = csr.fetchall()
     cnt = 0
@@ -493,8 +496,8 @@ def dousearch(req):
     response = render_to_response('showuser.html',dic,context_instance=RequestContext(req))
     if keyuid:
         response.set_cookie("keyuid", keyuid)
-    if keyuname:
-        response.set_cookie("keyuname", keyuname)
+    if stype:
+        response.set_cookie("stype", stype)
 
     return response
 
