@@ -442,6 +442,36 @@ def delinfo(req):
     response = HttpResponseRedirect("show?pn=1")
     return response
 
+def delcmt(req):
+    did = req.GET.get("did")
+    uid = req.GET.get("uid")
+    myuid = req.COOKIES.get("uid")
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.row_factory = sqlite3.Row
+    csr = conn.cursor()
+    csr.execute("select * from comment where uid=? and did=?", (uid, did,))
+    ocmts = csr.fetchall()
+    pcmt = None
+    rate = float(5.0)
+    for ocmt in ocmts:
+        pcmt = ocmt
+    rate = pcmt["rate"]
+    conn.execute("delete from comment where uid=? and did=?", (uid, did,))
+    conn.commit()
+    csr.execute("select * from sqlDemo where did=?", (did,))
+    recs = csr.fetchall()
+    ditem = None
+    for rec in recs:
+        ditem = rec
+    old_rnum = float(ditem["rnum"])
+    old_rate = float(ditem["rate"])
+    new_rnum = round(old_rnum - 1.0, 2)
+    new_rate = round((old_rate * old_rnum - rate) / new_rnum, 2)
+    conn.execute("update sqlDemo set rnum=?, rate=? where did=?", (new_rnum, new_rate, did))
+    conn.commit()
+    response = HttpResponseRedirect("cmt?uid="+str(myuid)+"&did="+str(did))
+    return response
+
 def test(req):
     return render_to_response('/static/test.txt')
 

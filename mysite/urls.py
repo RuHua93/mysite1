@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^cmt$', views.cmt, name = 'cmt'),
     url(r'^modinfo$', views.modinfo, name = 'modinfo'),
     url(r'^delinfo$', views.delinfo, name = 'delinfo'),
+    url(r'^delcmt$', views.delcmt, name = 'delcmt'),
     url(r'^modemail$', views.modemail, name = 'modemail'),
     url(r'^admin/', include(admin.site.urls)),
 )
