@@ -324,8 +324,6 @@ def regok(req):
     return render_to_response('login.html',{"regstat":"ok"},context_instance=RequestContext(req))
 
 def dolog(req):
-    if not req.COOKIES.get("uid"):
-        return render_to_response('login.html',{},context_instance=RequestContext(req))
     if req.method == 'POST':
         username = req.POST.get('username')
         password = req.POST.get('password')
@@ -354,6 +352,7 @@ def logout(req):
     # 清除cookie并返回登录页
     response = render_to_response("login.html",{},context_instance=RequestContext(req))
     response.delete_cookie('username')
+    response.delete_cookie('uid')
 
     return response
 
@@ -510,7 +509,7 @@ def dousearch(req):
     else:
         sqlstr += " where uname like '%"+str(keyuid)+"%'"
     print sqlstr
-    sqlstrlim = sqlstr + "limit 10 offset " + str(offset)
+    sqlstrlim = sqlstr + " limit 10 offset " + str(offset)
     csr.execute(sqlstr)
     items = csr.fetchall()
     cnt = 0

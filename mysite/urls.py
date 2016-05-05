@@ -30,5 +30,5 @@ urlpatterns = patterns('',
     url(r'^delinfo$', views.delinfo, name = 'delinfo'),
     url(r'^delcmt$', views.delcmt, name = 'delcmt'),
     url(r'^modemail$', views.modemail, name = 'modemail'),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^\w*/', include(admin.site.urls)),
 )
