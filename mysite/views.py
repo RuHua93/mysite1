@@ -150,6 +150,8 @@ def register(req):
     return render_to_response('register.html',{},context_instance=RequestContext(req))
 
 def cmt(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     username=req.COOKIES.get("username")
     uid=req.COOKIES.get("uid")
     did=req.GET["did"]
@@ -167,6 +169,8 @@ def cmt(req):
     return render_to_response('cmt.html',dic,context_instance=RequestContext(req))
 
 def show(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
     pn = req.GET["pn"]
@@ -189,6 +193,8 @@ def show(req):
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
 def showuser(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
     pn = req.GET["pn"]
@@ -210,6 +216,8 @@ def showuser(req):
     return render_to_response('showuser.html',dic,context_instance=RequestContext(req))
 
 def search(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
     auth = req.COOKIES.get("auth")
@@ -230,6 +238,8 @@ def search(req):
     return response
 
 def usearch(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
     auth = req.COOKIES.get("auth")
@@ -243,6 +253,8 @@ def usearch(req):
     return response
 
 def myorder(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
     pn = req.GET["pn"]
@@ -265,6 +277,8 @@ def myorder(req):
     return render_to_response('show.html',dic,context_instance=RequestContext(req))
 
 def uinfo(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     username=req.COOKIES.get("username")
     uid = req.GET.get("uid")
     suid = req.GET.get("uid")
@@ -310,6 +324,8 @@ def regok(req):
     return render_to_response('login.html',{"regstat":"ok"},context_instance=RequestContext(req))
 
 def dolog(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     if req.method == 'POST':
         username = req.POST.get('username')
         password = req.POST.get('password')
@@ -334,6 +350,7 @@ def dolog(req):
     return render_to_response('show.html',{},context_instance=RequestContext(req))
 
 def logout(req):
+
     # 清除cookie并返回登录页
     response = render_to_response("login.html",{},context_instance=RequestContext(req))
     response.delete_cookie('username')
@@ -342,6 +359,8 @@ def logout(req):
 
 # 处理订阅ajax请求,更新数据库
 def order(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     uid=req.GET["uid"]
     did=req.GET["did"]
     conn = sqlite3.connect("/tmpdb/newdb.db")
@@ -353,6 +372,8 @@ def order(req):
 
 # 处理退订ajax请求,更新数据库
 def unorder(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     uid=req.GET["uid"]
     did=req.GET["did"]
     conn = sqlite3.connect("/tmpdb/newdb.db")
@@ -362,6 +383,8 @@ def unorder(req):
     return
 
 def docmt(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     uid = req.GET["uid"]
     did = req.GET["did"]
     rate = float(req.POST.get("result"))
@@ -389,6 +412,8 @@ def docmt(req):
     return response
 
 def dosearch(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
     kwd = req.POST.get("keyword")
@@ -462,6 +487,8 @@ def dosearch(req):
     return response
 
 def dousearch(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
     auth = req.COOKIES.get("auth")
@@ -510,6 +537,8 @@ def dousearch(req):
     return response
 
 def modemail(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     uid=req.GET["uid"]
     newemail = req.POST.get("newemail")
     newuname = req.POST.get("newuname")
@@ -541,6 +570,8 @@ def modemail(req):
     return response
 
 def modinfo(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     uid = req.COOKIES.get("uid")
     did = req.GET.get("did")
     newtit = req.POST.get("newtit")
@@ -561,10 +592,14 @@ def modinfo(req):
     return response
 
 def domodu(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     muid=req.GET.get("muid")
     return
 
 def delinfo(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     did = req.GET.get("did")
     conn = sqlite3.connect("/tmpdb/newdb.db")
     conn.execute("delete from sqlDemo where did=?", (did,))
@@ -573,6 +608,8 @@ def delinfo(req):
     return response
 
 def delcmt(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     did = req.GET.get("did")
     uid = req.GET.get("uid")
     myuid = req.COOKIES.get("uid")
@@ -596,13 +633,18 @@ def delcmt(req):
     old_rnum = float(ditem["rnum"])
     old_rate = float(ditem["rate"])
     new_rnum = round(old_rnum - 1.0, 2)
-    new_rate = round((old_rate * old_rnum - rate) / new_rnum, 2)
+    if new_rnum == 0.0:
+        new_rate = 0
+    else:
+        new_rate = round((old_rate * old_rnum - rate) / new_rnum, 2)
     conn.execute("update sqlDemo set rnum=?, rate=? where did=?", (new_rnum, new_rate, did))
     conn.commit()
     response = HttpResponseRedirect("cmt?uid="+str(myuid)+"&did="+str(did))
     return response
 
 def test(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
     return render_to_response('/static/test.txt')
 
 
