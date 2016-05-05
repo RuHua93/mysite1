@@ -173,7 +173,9 @@ def show(req):
         return render_to_response('login.html',{},context_instance=RequestContext(req))
     username=req.COOKIES.get("username")
     uid = req.COOKIES.get("uid")
-    pn = req.GET["pn"]
+    pn = req.GET.get("pn")
+    if not pn:
+        pn = 1
     auth = req.COOKIES.get("auth")
     pn = int(pn)
     items, cnt = getShow(pn)
