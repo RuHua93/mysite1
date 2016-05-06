@@ -608,6 +608,39 @@ def delinfo(req):
     response = HttpResponseRedirect("show?pn=1")
     return response
 
+def deluser(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
+    duid = req.GET.get("duid")
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.row_factory = sqlite3.Row
+    csr = conn.cursor()
+    # 删除用户之前要把他的评论和订阅删掉
+    csr.execute("select * from comment where uid=?", (duid,))
+    dcmts = csr.fetchall()
+    for dcmt in dcmts:
+        rate = dcmt["rate"]
+        did = dcmt["did"]
+        csr.execute("select * from sqlDemo where did=?", (did,))
+        recs = csr.fetchall()
+        ditem = None
+        for rec in recs:
+            ditem = rec
+        old_rnum = float(ditem["rnum"])
+        old_rate = float(ditem["rate"])
+        new_rnum = round(old_rnum - 1.0, 2)
+        if new_rnum == 0.0:
+            new_rate = 0
+        else:
+            new_rate = round((old_rate * old_rnum - rate) / new_rnum, 2)
+        conn.execute("update sqlDemo set rnum=?, rate=? where did=?", (new_rnum, new_rate, did))
+        conn.execute("delete from comment where uid=? and did=?", (duid, did))
+    conn.execute("delete from od where uid=?", (duid,))
+    conn.execute("delete from user where uid=?", (duid,))
+    conn.commit()
+    response = HttpResponseRedirect("showuser?pn=1")
+    return response
+
 def delcmt(req):
     if not req.COOKIES.get("uid"):
         return render_to_response('login.html',{},context_instance=RequestContext(req))

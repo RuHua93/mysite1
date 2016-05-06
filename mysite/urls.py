@@ -30,5 +30,6 @@ urlpatterns = patterns('',
     url(r'^delinfo$', views.delinfo, name = 'delinfo'),
     url(r'^delcmt$', views.delcmt, name = 'delcmt'),
     url(r'^modemail$', views.modemail, name = 'modemail'),
+    url(r'^deluser$', views.deluser, name = 'deluser'),
     url(r'^\w*/', views.show, name="auto"),
 )
