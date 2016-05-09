@@ -144,6 +144,9 @@ def welcome(req):
     return render_to_response('welcome.html')
 
 def login(req):
+    if req.COOKIES.get("uid"):
+        response = HttpResponseRedirect('show?pn=1')
+        return response
     return render_to_response('login.html',{},context_instance=RequestContext(req))
 
 def register(req):
