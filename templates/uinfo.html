@@ -128,7 +128,7 @@
                 </div>
                 <div id="right">
                     <br/>
-                    <button class="btn btn-warning" >{{ username }}</button>&nbsp;&nbsp;
+                    <button class="btn btn-warning" onclick="uinfo({{ uid }})">{{ username }}</button>&nbsp;&nbsp;
 {#                    {% if auth == "1" %}#}
 {#                    <button class="btn btn-success" onclick="window.location.href='manage'" >管理</button>&nbsp;&nbsp;#}
 {#                    {% endif %}#}
@@ -145,7 +145,7 @@
                             <a href="show?pn=1">资源库</a>
                         </li>
                         <li class="itemli active">
-                            <a href="#">个人中心</a>
+                            <a href="#">用户资料</a>
                         </li>
                     </ul>
                 </div>
