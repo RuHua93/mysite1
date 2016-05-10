@@ -307,6 +307,11 @@ def uinfo(req):
     uid = req.GET.get("uid")
     suid = req.GET.get("uid")
     err = req.GET.get("err")
+    modstat = req.GET.get("modstat")
+    if modstat:
+        modstat = str(modstat)
+    else:
+        modstat = ""
     if err:
         err = str(err)
     else:
@@ -316,7 +321,7 @@ def uinfo(req):
     uinfo, ocnt = getUserinfo(uid)
     print uinfo
     dic = {"uid":uid, "username":username, "t_items":top_items, "h_items":high_items,
-          "uinfo": uinfo, "ocnt":ocnt, "auth":auth, "suid":suid, "err":err}
+          "uinfo": uinfo, "ocnt":ocnt, "auth":auth, "suid":suid, "err":err, "modstat":modstat}
     return render_to_response('uinfo.html',dic,context_instance=RequestContext(req))
 
 def doreg(req):
@@ -614,11 +619,60 @@ def modinfo(req):
     response = HttpResponseRedirect("cmt?uid="+str(uid)+"&did="+str(did))
     return response
 
+def moduinfo(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
+    username=req.COOKIES.get("username")
+    uid = req.COOKIES.get("uid")
+    auth = req.COOKIES.get("auth")
+    muid = req.GET.get("muid")
+    err = req.GET.get("err")
+    uid = str(uid)
+    muid = str(muid)
+    showpwd = "no"
+    if uid == muid:
+        showpwd = "yes"
+    if not err:
+        err = ""
+
+    top_items, high_items = getTopHigh()
+
+    dic = {"act":"search",  "uid":str(uid), "username":username,"h_items":high_items, "t_items":top_items,
+           "auth":auth, "muid":str(muid), "showpwd":showpwd, "err":err}
+
+    response = render_to_response('moduinfo.html',dic,context_instance=RequestContext(req))
+    return response
+
 def domodu(req):
     if not req.COOKIES.get("uid"):
         return render_to_response('login.html',{},context_instance=RequestContext(req))
     muid=req.GET.get("muid")
-    return
+    oldpwd=req.POST.get("oldpwd")
+    newpwd=req.POST.get("newpwd")
+    newemail=req.POST.get("newemail")
+    muid = str(muid)
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.row_factory = sqlite3.Row
+    csr = conn.cursor()
+    if oldpwd:
+        csr.execute("select pwd from user where uid=?", (muid,))
+        dbpwd = csr.fetchall()[0][0]
+        print oldpwd, dbpwd
+        if oldpwd != dbpwd:
+            response = HttpResponseRedirect("moduinfo?muid="+str(muid)+"&err=pwdwrng")
+            return response
+        if newemail:
+            csr.execute("select * from user where email=?", (newemail,))
+            emails = csr.fetchall()
+            if emails:
+                response = HttpResponseRedirect("moduinfo?muid="+muid+"&err=exemail")
+                return response
+            conn.execute("update user set email=? where uid=?", (newemail, muid))
+        if newpwd:
+            conn.execute("update user set pwd=? where uid=?", (newpwd, muid))
+    conn.commit()
+    response = HttpResponseRedirect("uinfo?uid="+muid+"&modstat=ok")
+    return response
 
 def doadditem(req):
     if not req.COOKIES.get("uid"):

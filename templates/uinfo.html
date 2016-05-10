@@ -84,6 +84,10 @@
                 window.history.back(-1);
                 return false
             }
+            function moduinfo(muid) {
+                window.location.href="moduinfo?muid="+muid;
+                return false;
+            }
             function modemail() {
                 document.getElementById("modemail").setAttribute("class", "")
                 window.location.href="#herodiv";
@@ -152,16 +156,11 @@
             </div>
 
             <div id="myDiv">
-                {% if err == "exemail" %}
-                <div class="alert alert-error alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
-                    <strong>修改失败</strong>&nbsp;邮箱已被注册
-                </div>
-                {% elif err == "exuname" %}
-                <div class="alert alert-error alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
-                    <strong>修改失败</strong>&nbsp;用户名已存在
-                </div>
+                {% if modstat == "ok" %}
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
+                        <strong>修改成功&nbsp;</strong>
+                    </div>
                 {% endif %}
             </div>
             <div id='content' class='row-fluid'>
@@ -186,7 +185,7 @@
                             </tr>
 
                             <tr>
-                                <td>订阅数</td><td><a href="myorder?pn=1">{{ ocnt }}</a></td>
+                                <td>订阅数</td><td><a target="_blank" href="myorder?pn=1">{{ ocnt }}</a></td>
                             </tr>
                         </table>
                         <br/>
@@ -208,11 +207,11 @@
                         </div>
                         <br/>
                         {% if auth != "1" %}
-                        <button class="btn btn-info btn-large" onclick="modemail()">
+                        <button class="btn btn-info btn-large" onclick="return moduinfo({{ uinfo.0 }})">
                             修改信息
                         </button>
                         {% else %}
-                        <button class="btn btn-inverse btn-large" onclick="modemail()">
+                        <button class="btn btn-inverse btn-large" onclick="return moduinfo({{ uinfo.0 }})">
                             编&nbsp;辑
                         </button>
                         {% endif %}
