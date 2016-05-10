@@ -242,6 +242,25 @@ def search(req):
 
     return response
 
+def additem(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
+    username=req.COOKIES.get("username")
+    uid = req.COOKIES.get("uid")
+    auth = req.COOKIES.get("auth")
+    add = req.GET.get("add")
+
+    if not add:
+        add = "no"
+
+    top_items, high_items = getTopHigh()
+
+    dic = {"act":"addone",  "uid":uid, "username":username,"h_items":high_items,
+           "t_items":top_items, "auth":auth, "add":add}
+    response = render_to_response('additem.html',dic,context_instance=RequestContext(req))
+
+    return response
+
 def usearch(req):
     if not req.COOKIES.get("uid"):
         return render_to_response('login.html',{},context_instance=RequestContext(req))
@@ -600,6 +619,24 @@ def domodu(req):
         return render_to_response('login.html',{},context_instance=RequestContext(req))
     muid=req.GET.get("muid")
     return
+
+def doadditem(req):
+    if not req.COOKIES.get("uid"):
+        return render_to_response('login.html',{},context_instance=RequestContext(req))
+    atitle = req.POST.get("atitle")
+    alink = req.POST.get("alink")
+    atime = req.POST.get("atime")
+    asrc = req.POST.get("asrc")
+    atitle = str(atitle)
+    alink = str(alink)
+    if not atime:
+        atime = datetime.datetime.now().strftime("%Y-%m-%d %X")
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.execute("insert into sqlDemo(title, link, src, img, time, ctime, rate, rnum) values(?,?,?,?,?,?,?,?)",
+                 (atitle, alink, asrc, "/static/han.png", atime, atime, 0, 0) )
+    conn.commit()
+    response = HttpResponseRedirect("additem?add=ok")
+    return response
 
 def delinfo(req):
     if not req.COOKIES.get("uid"):

@@ -203,6 +203,9 @@
                         <li>
                             <a href="usearch">用户搜索</a>
                         </li>
+                        <li>
+                            <a href="additem">添加资源</a>
+                        </li>
                         {% endif %}
                     </ul>
                 </div>
@@ -218,7 +221,7 @@
                         <hr/>
                         <form action="dosearch?pn=1" method="post">
                             {% csrf_token %}
-                            <input name="keyword" id="keyword" type="text" placeholder="关键词" style="width: 500px"><br/>
+                            <input name="keyword" id="keyword" type="text" placeholder="关键词" style="width: 500px" required autofocus><br/>
                             <br/>
                             <div class="controls input-append date form_datetime" data-date="2012-09-16 05:25:07" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">
 {#                                <label>时间从:</label>#}

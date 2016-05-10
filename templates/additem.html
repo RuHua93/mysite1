@@ -55,10 +55,6 @@
             .sidetit {
                 color: darkblue;
             }
-            .ulist {
-                font-size: 18px;
-                text-decoration: underline;
-            }
         </style>
         <script href="/static/Datetime/js/bootstrap-datetimepicker.min.js"></script>
 
@@ -73,18 +69,6 @@
             }
             function uinfo(uid) {
                 window.location.href="uinfo?uid="+uid
-            }
-            function byuname() {
-                document.getElementById("btnuid").setAttribute("class", "btn");
-                document.getElementById("btnuname").setAttribute("class", "btn active");
-                document.getElementById("stype").setAttribute("value", "byuname");
-                document.getElementById("keyuid").setAttribute("placeholder", "用户名");
-            }
-            function byuid() {
-                document.getElementById("btnuid").setAttribute("class", "btn active");
-                document.getElementById("btnuname").setAttribute("class", "btn");
-                document.getElementById("stype").setAttribute("value", "byuid");
-                document.getElementById("keyuid").setAttribute("placeholder", "UID");
             }
         </script>
     </head>
@@ -122,47 +106,86 @@
                         <li>
                             <a href="myorder?pn=1">我的订阅</a>
                         </li>
-                        <li class="active">
-                            <a href="#">用户搜索</a>
-                        </li>
+                        {% if auth == "1" %}
                         <li>
-                            <a href="additem">添加资源</a>
+                            <a href="usearch">用户搜索</a>
                         </li>
+                        <li class="active">
+                            <a href="#">添加资源</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
             <div id="myDiv">
+                {% if add == "ok" %}
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" onclick="cancel()">&times;</button>
+                        <strong>添加成功&nbsp;</strong>
+                    </div>
+                {% endif %}
             </div>
             <div id='content' class='row-fluid'>
 
                 <div class='span8 main listc'>
                     <br/>
                     <div class="hero-unit">
-                        <h3>用户搜索</h3>
+                        <h3>添加资源</h3>
                         <hr/>
-                        <div class="btn-group">
-                            <button id="btnuid" class="btn active" onclick="byuid()">按UID</button>
-                            <button id="btnuname" class="btn" onclick="byuname()">按用户名</button>
-                        </div>
-                        <br/><br/>
-                        <form action="dousearch?pn=1" method="post">
+                        <form action="doadditem" method="post">
                             {% csrf_token %}
-                            <div id="divuid">
-                            <input name="keyuid" id="keyuid" type="text" placeholder="UID" style="width: 500px"><br/></div>
+                            <input name="atitle" id="atitle" type="text" placeholder="标题" style="width: 500px" required autofocus><br/>
                             <br/>
-                            <div class="hide">
-                            <input name="stype" id="stype" value="byuid" type="text">
+                            <input name="alink" id="alink" type="text" placeholder="链接" style="width: 500px" required><br/>
+                            <br/>
+                            <input name="asrc" id="asrc" type="text" placeholder="源" style="width: 500px" required><br/>
+                            <br/>
+                            <div class="controls input-append date form_datetime" data-date="2012-09-16 05:25:07" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">
+                                <input id="atime" name="atime" size="16" type="text" value="" style="width: 300px" placeholder="更新时间(可不填)" >
+                                <span class="add-on"><i class="icon-remove"></i></span>
+                                <span class="add-on"><i class="icon-th"></i></span>
                             </div>
-{#                            <div id="divuname" class="hide">#}
-{#                            <input name="keyuname" id="keyuname" type="text" placeholder="用户名" style="width: 500px" class=""><br/></div>#}
-                            <input type="submit" value="搜 索" class="btn btn-info btn-large">
+                            <br/>
+                            <input type="submit" value="添 加" class="btn btn-info btn-large">
                             &nbsp;&nbsp;
                             <input type="button" value="返 回" onclick="return goback()" class="btn btn-success btn-large">
-                            &nbsp;&nbsp;
-                            <a class="ulist" href="showuser?pn=1">用户列表</a>
                         </form>
 
                     </div>
+{#                    <div class="container">#}
+{#                        <form action="" class="form-horizontal">#}
+{#                            <fieldset>#}
+{#                                <legend>Test</legend>#}
+{#                                <div class="control-group">#}
+{#                                    <label class="control-label">DateTime Picking</label>#}
+{#                                    <div class="controls input-append date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:mm:ss" data-link-field="dtp_input1">#}
+{#                                        <input size="16" type="text" value="" readonly>#}
+{#                                        <span class="add-on"><i class="icon-remove"></i></span>#}
+{#                                        <span class="add-on"><i class="icon-th"></i></span>#}
+{#                                    </div>#}
+{#                                    <input type="hidden" id="dtp_input1" value="" /><br/>#}
+{#                                </div>#}
+{#                                <div class="control-group">#}
+{#                                    <label class="control-label">Date Picking</label>#}
+{#                                    <div class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">#}
+{#                                        <input size="16" type="text" value="" readonly>#}
+{#                                        <span class="add-on"><i class="icon-remove"></i></span>#}
+{#                                        <span class="add-on"><i class="icon-th"></i></span>#}
+{#                                    </div>#}
+{#                                    <input type="hidden" id="dtp_input2" value="" /><br/>#}
+{#                                </div>#}
+{#                                <div class="control-group">#}
+{#                                    <label class="control-label">Time Picking</label>#}
+{#                                    <div class="controls input-append date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">#}
+{#                                        <input size="16" type="text" value="" readonly>#}
+{#                                        <span class="add-on"><i class="icon-remove"></i></span>#}
+{#                                        <span class="add-on"><i class="icon-th"></i></span>#}
+{#                                    </div>#}
+{#                                    <input type="hidden" id="dtp_input3" value="" /><br/>#}
+{#                                </div>#}
+{#                            </fieldset>#}
+{#                        </form>#}
+{#                    </div>#}
 
                 </div>
 
@@ -196,7 +219,19 @@
         </div>
         <script type="text/javascript" src="/static/Datetime/sample/jquery/jquery-1.8.3.min.js"></script>
         <script type="text/javascript" src="/static/Datetime/sample/bootstrap/js/bootstrap.min.js"></script>
-
-
+        <script type="text/javascript" src="/static/Datetime/js/bootstrap-datetimepicker.js"></script>
+        <script type="text/javascript" src="/static/Datetime/js/locales/bootstrap-datetimepicker.fr.js"></script>
+        <script type="text/javascript">
+        $('.form_datetime').datetimepicker({
+            //language:  'fr',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+        </script>
     </body>
 </html>
