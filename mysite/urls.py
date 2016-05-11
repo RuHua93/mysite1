@@ -34,5 +34,6 @@ urlpatterns = patterns('',
     url(r'^delcmt$', views.delcmt, name = 'delcmt'),
     url(r'^modemail$', views.modemail, name = 'modemail'),
     url(r'^deluser$', views.deluser, name = 'deluser'),
+    url(r'^userexcel$', views.userexcel, name = 'userexcel'),
     url(r'^\w*/', views.show, name="auto"),
 )

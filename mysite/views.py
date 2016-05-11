@@ -770,6 +770,51 @@ def delcmt(req):
     response = HttpResponseRedirect("cmt?uid="+str(myuid)+"&did="+str(did))
     return response
 
+def userexcel(req):
+    import openpyxl
+    from openpyxl.cell import get_column_letter
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=mymodel.xlsx'
+    wb = openpyxl.Workbook()
+    ws = wb.get_active_sheet()
+    ws.title = "MyModel"
+
+    row_num = 0
+
+    columns = [
+        (u"UID", 5),
+        (u"用户名", 15),
+        (u"密码", 15),
+        (u"邮箱", 20),
+    ]
+
+    for col_num in xrange(len(columns)):
+        c = ws.cell(row=row_num + 1, column=col_num + 1)
+        c.value = columns[col_num][0]
+        c.style.font.bold = True
+        # set column width
+        ws.column_dimensions[get_column_letter(col_num+1)].width = columns[col_num][1]
+    conn = sqlite3.connect("/tmpdb/newdb.db")
+    conn.row_factory = sqlite3.Row
+    csr = conn.cursor()
+    csr.execute("select * from user order by uid")
+    items = csr.fetchall()
+    for item in items:
+        row_num += 1
+        row = [
+            item["uid"],
+            item["uname"],
+            item["pwd"],
+            item["email"]
+        ]
+        for col_num in xrange(len(row)):
+            c = ws.cell(row=row_num + 1, column=col_num + 1)
+            c.value = row[col_num]
+            c.style.alignment.wrap_text = True
+
+    wb.save(response)
+    return response
+
 def test(req):
     if not req.COOKIES.get("uid"):
         return render_to_response('login.html',{},context_instance=RequestContext(req))
