@@ -97,6 +97,10 @@
 
                 return false
             }
+            function  deluser(duid) {
+                window.location.href="deluser?duid="+duid;
+                return false
+            }
         </script>
     </head>
 
@@ -173,6 +177,8 @@
                             <input type="submit" value="提 交" onclick="return check()" class="btn btn-info btn-large">
                             &nbsp;&nbsp;
                             <input type="button" value="返 回" onclick="return goback()" class="btn btn-success btn-large">
+                            &nbsp;&nbsp;
+                            <input type="button" class="btn btn-inverse btn-large" value="删除" onclick="return deluser({{ muid }})"/>
                         </form>
                     </div>
                 </div>
